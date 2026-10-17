@@ -1,0 +1,2807 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linux Distro Matcher - Rekomendasi Linux Sesuai Spek Komputer Anda</title>
+  <meta name="description" content="Temukan distribusi Linux yang paling cocok, kencang, dan stabil untuk spesifikasi komputer atau laptop Anda. Mulai dari spek kentang hingga rig gaming mutakhir.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- Fallback External CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Embedded Standalone Stylesheet (100% Kebal 404 di GitHub Pages) -->
+  <style>
+/* Custom CSS untuk Linux Distro Matcher */
+
+:root {
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-light: rgba(16, 185, 129, 0.15);
+  --bg-dark: #0f172a;
+  --card-dark: #1e293b;
+  --card-border: #334155;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent-cyan: #06b6d4;
+  --accent-purple: #8b5cf6;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0b1120;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Glassmorphism Card */
+.glass-card {
+  background: rgba(30, 41, 59, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+/* Distro Result Card */
+.distro-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+
+.distro-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent-cyan), var(--accent-purple));
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: gradientSlide 4s ease infinite;
+}
+
+@keyframes gradientSlide {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.distro-card.top-match::before {
+  opacity: 1;
+}
+
+.distro-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px -12px rgba(16, 185, 129, 0.25);
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+/* Top Match Glowing Border Animation */
+@keyframes borderGlowPulse {
+  0%, 100% {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 24px -4px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    border-color: rgba(6, 182, 212, 0.7);
+    box-shadow: 0 0 32px -2px rgba(6, 182, 212, 0.45);
+  }
+}
+
+.distro-card.top-match {
+  animation: borderGlowPulse 4s infinite ease-in-out;
+}
+
+/* Staggered Card Entrance Animation */
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.distro-card-animated {
+  animation: cardEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Chip Buttons & Active Animation */
+.spec-chip {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.spec-chip:hover {
+  transform: translateY(-1.5px);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.spec-chip:active {
+  transform: scale(0.95);
+}
+
+.spec-chip.active {
+  background-color: var(--primary) !important;
+  color: #ffffff !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+  animation: chipBounce 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes chipBounce {
+  0% { transform: scale(0.92); }
+  60% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* Floating Animations */
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+.animate-float {
+  animation: floatGentle 4s ease-in-out infinite;
+}
+
+@keyframes floatMascot {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.03);
+  }
+}
+
+.animate-mascot {
+  animation: floatMascot 3.5s ease-in-out infinite;
+}
+
+/* Background Aurora Blobs */
+@keyframes auroraPulse1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translate(30px, -20px) scale(1.15);
+    opacity: 0.4;
+  }
+}
+
+@keyframes auroraPulse2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(-35px, 25px) scale(1.2);
+    opacity: 0.35;
+  }
+}
+
+.animate-aurora-1 {
+  animation: auroraPulse1 10s ease-in-out infinite;
+}
+
+.animate-aurora-2 {
+  animation: auroraPulse2 12s ease-in-out infinite;
+}
+
+/* Shimmer Text Effect */
+@keyframes textShimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-shimmer-text {
+  background-size: 200% auto;
+  animation: textShimmer 5s ease infinite;
+}
+
+/* Shimmer Button Light Sweep */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(25deg);
+  animation: btnSweep 4.5s infinite linear;
+}
+
+@keyframes btnSweep {
+  0% { left: -60%; }
+  25% { left: 140%; }
+  100% { left: 140%; }
+}
+
+/* Pulse Animation */
+@keyframes soft-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 0.88;
+  }
+}
+
+.animate-pulse-soft {
+  animation: soft-pulse 3s infinite ease-in-out;
+}
+
+/* Score Progress Bar Animation */
+.score-progress-bar {
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Floating Creator Badge at bottom */
+.creator-badge {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.15));
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.25);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.creator-badge:hover {
+  transform: translateY(-2px) scale(1.02);
+  border-color: rgba(6, 182, 212, 0.6);
+  box-shadow: 0 8px 30px -4px rgba(6, 182, 212, 0.4);
+}
+
+/* Progress Bar Glowing */
+.progress-glow {
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.6);
+}
+
+/* Custom Tooltip styling */
+.tooltip-box {
+  visibility: hidden;
+  position: absolute;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.has-tooltip:hover .tooltip-box {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Terminal Look Box */
+.terminal-box {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  background: #0b1120;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+}
+
+/* Print Friendly */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .glass-card {
+    background: #ffffff !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    color: #000000 !important;
+  }
+}
+
+/* Comparison Matrix Table Styles */
+.matrix-section {
+  scroll-margin-top: 5rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.82rem;
+}
+
+.matrix-table th {
+  background: rgba(15, 23, 42, 0.95);
+  color: #94a3b8;
+  font-weight: 700;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+
+.matrix-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  white-space: nowrap;
+}
+
+.matrix-table tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.matrix-filter-chip {
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(30, 41, 59, 0.6);
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.matrix-filter-chip:hover {
+  background: rgba(51, 65, 85, 0.8);
+  color: #ffffff;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.matrix-filter-chip.active {
+  background: #10b981;
+  color: #060911;
+  border-color: #10b981;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+}
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 flex flex-col min-h-screen">
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 text-slate-950 text-xl font-bold">
+          <i class="fa-brands fa-linux"></i>
+        </div>
+        <div>
+          <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
+            DistroMatcher
+          </span>
+          <span class="hidden sm:inline-block text-xs text-slate-400 font-medium ml-2 px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700">
+            ID Edition
+          </span>
+        </div>
+      </div>
+
+      <nav class="flex items-center space-x-2 sm:space-x-4">
+        <button onclick="scrollToSection('calculator')" class="text-sm text-slate-300 hover:text-emerald-400 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-sliders text-emerald-400"></i>
+          <span class="hidden md:inline">Cek Spek</span>
+        </button>
+        <button onclick="scrollToSection('results')" class="text-sm text-slate-300 hover:text-emerald-400 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-list-check text-cyan-400"></i>
+          <span class="hidden md:inline">Hasil Rekomendasi</span>
+        </button>
+        <button onclick="scrollToSection('perbandingan')" class="text-sm text-slate-300 hover:text-purple-400 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-table text-purple-400"></i>
+          <span class="hidden md:inline">Tabel Spek</span>
+        </button>
+        <button onclick="openBeginnerGuide()" class="text-sm text-slate-300 hover:text-emerald-400 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-book-open text-amber-400"></i>
+          <span>Panduan Pemula</span>
+        </button>
+        <button onclick="openWindowsSpecTips()" class="text-sm bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5">
+          <i class="fa-brands fa-windows text-blue-400"></i>
+          <span class="hidden sm:inline">Cara Cek Spek</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden pt-12 pb-8 sm:pt-16 sm:pb-12 border-b border-slate-800/60">
+    <!-- Animated Aurora Background Blobs -->
+    <div class="absolute -top-32 -left-20 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none animate-aurora-1"></div>
+    <div class="absolute top-20 -right-20 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none animate-aurora-2"></div>
+    <div class="absolute -bottom-20 left-1/3 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none animate-aurora-1"></div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      
+      <!-- Animated Tux Mascot Greeting -->
+      <div class="inline-flex items-center gap-3 px-4 py-2 rounded-2xl bg-slate-900/90 border border-emerald-500/30 shadow-lg shadow-emerald-500/10 mb-6 animate-mascot backdrop-blur-md">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Tux" class="w-8 h-8 filter drop-shadow">
+        <div class="text-left">
+          <div class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+            <span>Tux Matchmaker</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          </div>
+          <div class="text-[11px] text-slate-300">Siap mencocokkan distro terbaik untuk komputermu!</div>
+        </div>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+        Temukan <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent animate-shimmer-text">Linux Terbaik</span><br>
+        Sesuai Spesifikasi Komputer Anda
+      </h1>
+      <p class="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto mb-8">
+        Jangan biarkan laptop lawas berdebu atau PC baru terbebani OS yang berat. Masukkan spek hardware Anda, dan kami carikan distro yang paling lancar, hemat RAM, dan cocok untuk kebutuhan Anda.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-8">
+        <button id="btn-detect-hardware" onclick="detectHardwareSpecs()" class="btn-shine px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold text-sm sm:text-base shadow-lg shadow-emerald-500/25 flex items-center gap-2.5 transition-all transform hover:-translate-y-1 hover:shadow-emerald-500/40 active:translate-y-0">
+          <i class="fa-solid fa-microchip animate-spin-slow"></i>
+          <span>Deteksi Spek Otomatis via Browser</span>
+        </button>
+        <button onclick="scrollToSection('calculator')" class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-sm sm:text-base flex items-center gap-2.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+          <i class="fa-solid fa-keyboard text-emerald-400"></i>
+          <span>Isi Spek Manual</span>
+        </button>
+        <button onclick="scrollToSection('perbandingan')" class="px-5 py-3 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-purple-500/40 text-purple-300 font-semibold text-sm sm:text-base flex items-center gap-2.5 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+          <i class="fa-solid fa-table text-purple-400"></i>
+          <span>Tabel Spek Lengkap</span>
+        </button>
+      </div>
+
+      <!-- Quick Preset Chips -->
+      <div class="pt-4 border-t border-slate-800/80">
+        <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-3 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+          <span>Pilih Profil Cepat (1-Klik Isi Form):</span>
+        </div>
+        <div class="flex flex-wrap justify-center gap-2 text-xs">
+          <button onclick="applyPreset('potato')" class="px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-emerald-500/20 hover:border-emerald-500/50 border border-slate-700 text-slate-300 transition-colors flex items-center gap-1.5">
+            <span>🥔</span>
+            <span>Laptop Kentang Jadul (RAM 2GB)</span>
+          </button>
+          <button onclick="applyPreset('office')" class="px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-emerald-500/20 hover:border-emerald-500/50 border border-slate-700 text-slate-300 transition-colors flex items-center gap-1.5">
+            <span>💼</span>
+            <span>PC Kantor & Sekolah (RAM 4GB)</span>
+          </button>
+          <button onclick="applyPreset('student')" class="px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-emerald-500/20 hover:border-emerald-500/50 border border-slate-700 text-slate-300 transition-colors flex items-center gap-1.5">
+            <span>💻</span>
+            <span>Laptop Kuliah & Coding (RAM 8GB)</span>
+          </button>
+          <button onclick="applyPreset('gaming')" class="px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-emerald-500/20 hover:border-emerald-500/50 border border-slate-700 text-slate-300 transition-colors flex items-center gap-1.5">
+            <span>🎮</span>
+            <span>PC Gaming & Rendering (RAM 16GB)</span>
+          </button>
+          <button onclick="applyPreset('privacy')" class="px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-emerald-500/20 hover:border-emerald-500/50 border border-slate-700 text-slate-300 transition-colors flex items-center gap-1.5">
+            <span>🕵️</span>
+            <span>Privasi & Live USB</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
+    
+    <!-- Calculator Card -->
+    <section id="calculator" class="mb-14 scroll-mt-20">
+      <div class="glass-card rounded-2xl p-6 sm:p-8 relative">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 mb-6 border-b border-slate-800 gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-sm font-bold">1</span>
+              <span>Spesifikasi Komputer Anda</span>
+            </h2>
+            <p class="text-sm text-slate-400 mt-1">Sesuaikan data berikut dengan hardware komputer atau laptop yang Anda miliki.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="resetForm()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 text-xs font-medium border border-slate-700 transition-colors flex items-center gap-1.5">
+              <i class="fa-solid fa-rotate-left"></i>
+              <span>Reset Default</span>
+            </button>
+          </div>
+        </div>
+
+        <form id="spec-form" onsubmit="handleCalculate(event)">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- RAM (Memori) -->
+            <div class="space-y-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+              <div class="flex items-center justify-between">
+                <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                  <i class="fa-solid fa-memory text-emerald-400"></i>
+                  <span>Kapasitas RAM</span>
+                </label>
+                <span id="ram-display" class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  4 GB
+                </span>
+              </div>
+              <p class="text-xs text-slate-400">Pilih kapasitas RAM komputer Anda:</p>
+              
+              <div class="grid grid-cols-4 gap-2 text-xs">
+                <button type="button" class="spec-chip ram-chip py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="512">512 MB</button>
+                <button type="button" class="spec-chip ram-chip py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="1024">1 GB</button>
+                <button type="button" class="spec-chip ram-chip py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="2048">2 GB</button>
+                <button type="button" class="spec-chip ram-chip active py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="4096">4 GB</button>
+                <button type="button" class="spec-chip ram-chip py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="8192">8 GB</button>
+                <button type="button" class="spec-chip ram-chip py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="16384">16 GB</button>
+                <button type="button" class="spec-chip ram-chip py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="32768">32 GB</button>
+                <button type="button" class="spec-chip ram-chip py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="65536">64 GB</button>
+              </div>
+              <input type="hidden" id="input-ram" value="4096">
+            </div>
+
+            <!-- CPU Architecture & Cores -->
+            <div class="space-y-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+              <div class="flex items-center justify-between">
+                <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                  <i class="fa-solid fa-microchip text-cyan-400"></i>
+                  <span>Arsitektur & Core Prosesor</span>
+                </label>
+              </div>
+              <p class="text-xs text-slate-400">Arsitektur prosesor (32-bit / 64-bit):</p>
+              
+              <div class="grid grid-cols-3 gap-2 text-xs">
+                <button type="button" class="spec-chip arch-chip active py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="x86_64">
+                  64-bit (Modern)
+                </button>
+                <button type="button" class="spec-chip arch-chip py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="i386">
+                  32-bit (Jadul)
+                </button>
+                <button type="button" class="spec-chip arch-chip py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="arm64">
+                  ARM / SBC
+                </button>
+              </div>
+              <input type="hidden" id="input-arch" value="x86_64">
+
+              <div class="pt-2 border-t border-slate-800/80">
+                <div class="flex justify-between items-center mb-1.5">
+                  <span class="text-xs text-slate-400">Jumlah Inti (CPU Cores):</span>
+                  <span id="cores-display" class="text-xs font-bold text-cyan-300">2 Core (Dual Core)</span>
+                </div>
+                <div class="grid grid-cols-4 gap-1.5 text-xs">
+                  <button type="button" class="spec-chip core-chip py-1.5 rounded bg-slate-800 text-slate-300 border border-slate-700" data-value="1">1 Core</button>
+                  <button type="button" class="spec-chip core-chip active py-1.5 rounded bg-slate-800 text-slate-300 border border-slate-700" data-value="2">2 Core</button>
+                  <button type="button" class="spec-chip core-chip py-1.5 rounded bg-slate-800 text-slate-300 border border-slate-700" data-value="4">4 Core</button>
+                  <button type="button" class="spec-chip core-chip py-1.5 rounded bg-slate-800 text-slate-300 border border-slate-700" data-value="8">8+ Core</button>
+                </div>
+                <input type="hidden" id="input-cores" value="2">
+              </div>
+            </div>
+
+            <!-- Media Penyimpanan (Storage) -->
+            <div class="space-y-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+              <div class="flex items-center justify-between">
+                <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                  <i class="fa-solid fa-hard-drive text-amber-400"></i>
+                  <span>Penyimpanan (Storage)</span>
+                </label>
+                <span id="storage-display" class="text-xs font-bold text-amber-300">40 GB (SSD)</span>
+              </div>
+              <p class="text-xs text-slate-400">Tipe media drive utama:</p>
+
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <button type="button" class="spec-chip drive-chip active py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium flex items-center justify-center gap-1.5" data-value="ssd">
+                  <i class="fa-solid fa-bolt text-amber-400"></i>
+                  <span>SSD (Cepat)</span>
+                </button>
+                <button type="button" class="spec-chip drive-chip py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium flex items-center justify-center gap-1.5" data-value="hdd">
+                  <i class="fa-solid fa-compact-disc text-slate-400"></i>
+                  <span>HDD (Mekanik)</span>
+                </button>
+              </div>
+              <input type="hidden" id="input-drive-type" value="ssd">
+
+              <div class="pt-2 border-t border-slate-800/80">
+                <span class="text-xs text-slate-400 block mb-1.5">Sisa ruang kosong partisi:</span>
+                <div class="grid grid-cols-4 gap-1.5 text-xs">
+                  <button type="button" class="spec-chip space-chip py-1.5 rounded bg-slate-800 text-slate-300 border border-slate-700" data-value="10">10 GB</button>
+                  <button type="button" class="spec-chip space-chip py-1.5 rounded bg-slate-800 text-slate-300 border border-slate-700" data-value="20">20 GB</button>
+                  <button type="button" class="spec-chip space-chip active py-1.5 rounded bg-slate-800 text-slate-300 border border-slate-700" data-value="40">40 GB</button>
+                  <button type="button" class="spec-chip space-chip py-1.5 rounded bg-slate-800 text-slate-300 border border-slate-700" data-value="100">100 GB+</button>
+                </div>
+                <input type="hidden" id="input-storage-free" value="40">
+              </div>
+            </div>
+
+            <!-- Kartu Grafis (GPU) -->
+            <div class="space-y-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+              <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                <i class="fa-solid fa-display text-purple-400"></i>
+                <span>Kartu Grafis (GPU)</span>
+              </label>
+              <p class="text-xs text-slate-400">Pilih jenis GPU komputer:</p>
+              
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <button type="button" class="spec-chip gpu-chip active py-2 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="intel-integrated">
+                  Intel Bawaan / HD
+                </button>
+                <button type="button" class="spec-chip gpu-chip py-2 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="nvidia-modern">
+                  NVIDIA (GTX/RTX)
+                </button>
+                <button type="button" class="spec-chip gpu-chip py-2 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="amd">
+                  AMD Radeon
+                </button>
+                <button type="button" class="spec-chip gpu-chip py-2 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="nvidia-legacy">
+                  NVIDIA Jadul / Legacy
+                </button>
+              </div>
+              <input type="hidden" id="input-gpu" value="intel-integrated">
+            </div>
+
+            <!-- Tingkat Pengalaman & Mode Boot -->
+            <div class="space-y-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+              <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                <i class="fa-solid fa-user-graduate text-emerald-400"></i>
+                <span>Pengalaman Anda di Linux</span>
+              </label>
+              <p class="text-xs text-slate-400">Tingkat kemahiran pengguna:</p>
+              
+              <div class="grid grid-cols-3 gap-2 text-xs">
+                <button type="button" class="spec-chip level-chip active py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="beginner">
+                  🌱 Pemula
+                </button>
+                <button type="button" class="spec-chip level-chip py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="intermediate">
+                  🌿 Menengah
+                </button>
+                <button type="button" class="spec-chip level-chip py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-center font-medium" data-value="advanced">
+                  🌲 Mahir
+                </button>
+              </div>
+              <input type="hidden" id="input-level" value="beginner">
+
+              <div class="pt-2 border-t border-slate-800/80">
+                <span class="text-xs text-slate-400 block mb-1.5">Mode Boot Motherboard:</span>
+                <div class="grid grid-cols-3 gap-1.5 text-xs">
+                  <button type="button" class="spec-chip boot-chip active py-1.5 rounded bg-slate-800 text-slate-300 border border-slate-700" data-value="uefi">UEFI (Modern)</button>
+                  <button type="button" class="spec-chip boot-chip py-1.5 rounded bg-slate-800 text-slate-300 border border-slate-700" data-value="bios">BIOS (Legacy)</button>
+                  <button type="button" class="spec-chip boot-chip py-1.5 rounded bg-slate-800 text-slate-300 border border-slate-700" data-value="any">Tidak Tahu</button>
+                </div>
+                <input type="hidden" id="input-boot" value="uefi">
+              </div>
+            </div>
+
+            <!-- Gaya Antarmuka & Kebutuhan Utama -->
+            <div class="space-y-3 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+              <label class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                <i class="fa-solid fa-bullseye text-rose-400"></i>
+                <span>Tujuan Utama Pemakaian</span>
+              </label>
+              
+              <select id="input-use-case" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-emerald-500">
+                <option value="daily" selected>🌐 Harian / Browsing / YouTube (Umum)</option>
+                <option value="office">💼 Kantor / Kuliah / Administrasi Sekolah</option>
+                <option value="potato-pc">🥔 Menghidupkan Laptop Jadul / Spek Kentang</option>
+                <option value="gaming">🎮 Bermain Game (Steam, Heroic, Emulasi)</option>
+                <option value="programming">💻 Coding / Web Dev / Docker / IT</option>
+                <option value="privacy">🕵️ Privasi Maksimal & Anonimitas USB</option>
+                <option value="security">🛡️ Cyber Security & Penetration Testing</option>
+                <option value="customization">🎨 Penggemar Kustomisasi / Linux Ricing</option>
+              </select>
+
+              <div class="pt-2 border-t border-slate-800/80">
+                <span class="text-xs text-slate-400 block mb-1.5">Gaya Antarmuka Desktop yang Disukai:</span>
+                <select id="input-ui-style" class="w-full bg-slate-800 border border-slate-700 rounded-lg py-2 px-3 text-xs text-slate-200 focus:outline-none focus:border-emerald-500">
+                  <option value="any" selected>✨ Bebas / Rekomendasikan yang Terbaik</option>
+                  <option value="windows">🪟 Mirip Windows (Taskbar Bawah & Start Menu)</option>
+                  <option value="macos">🍎 Mirip macOS (Dock Bawah & Bersih)</option>
+                  <option value="minimal">⚡ Minimalis & Cepat (XFCE, IceWM, LXQt)</option>
+                  <option value="modern">🚀 Modern & Futuristik (GNOME, COSMIC)</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Submit Button -->
+          <div class="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-xs text-slate-400 flex items-center gap-2">
+              <i class="fa-solid fa-circle-info text-emerald-400"></i>
+              <span>Algoritma akan menganalisis kompatibilitas arsitektur, kapasitas RAM, dan bobot I/O secara otomatis.</span>
+            </div>
+            <button type="submit" class="btn-shine w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-slate-950 font-bold text-base shadow-xl shadow-emerald-500/25 flex items-center justify-center gap-3 transition-all transform hover:-translate-y-1 hover:shadow-emerald-500/40 active:translate-y-0 cursor-pointer">
+              <i class="fa-solid fa-magnifying-glass animate-bounce-slow"></i>
+              <span>Cari Rekomendasi Linux Sekarang</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="scroll-mt-20">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold mb-1">
+            <i class="fa-solid fa-check"></i>
+            <span id="results-count-badge">Hasil Rekomendasi</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">
+            Daftar Distro yang Cocok untuk Komputer Anda
+          </h2>
+        </div>
+
+        <!-- Filter & Sorting Controls -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300">
+            <span class="text-slate-500">Basis:</span>
+            <select id="filter-base" onchange="filterAndRenderResults()" class="bg-transparent text-slate-200 focus:outline-none cursor-pointer">
+              <option value="all" class="bg-slate-900">Semua Basis</option>
+              <option value="Ubuntu" class="bg-slate-900">Ubuntu</option>
+              <option value="Debian" class="bg-slate-900">Debian</option>
+              <option value="Arch" class="bg-slate-900">Arch Linux</option>
+              <option value="Fedora" class="bg-slate-900">Fedora</option>
+            </select>
+          </div>
+
+          <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300">
+            <span class="text-slate-500">Urutkan:</span>
+            <select id="sort-by" onchange="filterAndRenderResults()" class="bg-transparent text-slate-200 focus:outline-none cursor-pointer">
+              <option value="score" class="bg-slate-900">Skor Kecocokan Tertinggi</option>
+              <option value="ram-asc" class="bg-slate-900">RAM Paling Hemat</option>
+              <option value="difficulty-asc" class="bg-slate-900">Paling Mudah (Pemula)</option>
+              <option value="name-asc" class="bg-slate-900">Nama (A - Z)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Spec Summary Bar -->
+      <div id="spec-summary-bar" class="p-4 rounded-xl bg-slate-900/80 border border-slate-800/80 mb-6 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+        <!-- Rendered dynamically via JS -->
+      </div>
+
+      <!-- Distro Cards Container -->
+      <div id="distro-cards-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Dynamically rendered via JS -->
+      </div>
+    </section>
+
+    <!-- Comparison Matrix Section (Tabel Perbandingan Spesifikasi Lengkap) -->
+    <section id="perbandingan" class="matrix-section mb-14 scroll-mt-20">
+      <div class="glass-card rounded-2xl p-6 sm:p-8 relative">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between pb-6 mb-6 border-b border-slate-800 gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2.5">
+              <i class="fa-solid fa-table text-emerald-400"></i>
+              <span>Tabel Perbandingan Spesifikasi Lengkap</span>
+            </h2>
+            <p class="text-sm text-slate-400 mt-1">Perbandingan syarat hardware minimum, rekomendasi RAM, basis paket sistem operasi, dan tautan unduh resmi.</p>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <!-- Search Distro in Table -->
+            <div class="relative min-w-[240px]">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-xs"></i>
+              <input type="text" id="matrix-search-input" oninput="filterMatrixTable()" placeholder="Cari distro, desktop, basis..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors">
+              <button onclick="clearMatrixSearch()" id="matrix-clear-btn" class="hidden absolute right-3 top-2.5 text-slate-500 hover:text-slate-300 text-xs">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            
+            <span class="text-xs text-slate-500 hidden sm:inline">&bull;</span>
+            <div class="text-xs text-slate-400 whitespace-nowrap">
+              Menampilkan <span id="matrix-count-badge" class="font-bold text-emerald-400">18+</span> distro
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Chips for Table -->
+        <div class="flex flex-wrap items-center gap-2 mb-5 text-xs">
+          <span class="text-slate-400 font-medium mr-1"><i class="fa-solid fa-filter text-emerald-400"></i> Filter Cepat:</span>
+          <button type="button" onclick="setMatrixCategory('all')" class="matrix-filter-chip active" data-cat="all">Semua Distro</button>
+          <button type="button" onclick="setMatrixCategory('potato')" class="matrix-filter-chip" data-cat="potato">🥔 Spek Kentang (RAM ≤ 2GB)</button>
+          <button type="button" onclick="setMatrixCategory('32bit')" class="matrix-filter-chip" data-cat="32bit">⚡ Dukungan 32-bit (x86 Jadul)</button>
+          <button type="button" onclick="setMatrixCategory('beginner')" class="matrix-filter-chip" data-cat="beginner">🌱 Pemula (Mudah)</button>
+          <button type="button" onclick="setMatrixCategory('gaming')" class="matrix-filter-chip" data-cat="gaming">🎮 Gaming & Multimedia</button>
+          <button type="button" onclick="setMatrixCategory('privacy')" class="matrix-filter-chip" data-cat="privacy">🕵️ Privasi & Rescue</button>
+        </div>
+
+        <!-- Table Container with Horizontal Scroll -->
+        <div class="table-wrapper">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th>Nama Distro</th>
+                <th>Basis Sistem</th>
+                <th>Min. RAM</th>
+                <th>Rec. RAM</th>
+                <th>32-bit?</th>
+                <th>Default Desktop</th>
+                <th>Package Manager</th>
+                <th>Tingkat Kesulitan</th>
+                <th class="text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="matrix-table-body">
+              <!-- Static Pre-rendered Rows as Fallback & Immediate Paint -->
+              <tr class="hover:bg-slate-800/40 transition-colors">
+                <td>
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-700/80 p-1 flex items-center justify-center flex-shrink-0">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Linux_Mint_logo_without_wordmark.svg" alt="Linux Mint" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                      <div class="font-bold text-white text-xs sm:text-sm">Linux Mint</div>
+                      <div class="text-[11px] text-slate-400">Paling Populer untuk Pemula</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-xs font-mono border border-slate-700/60">Ubuntu / Debian</span></td>
+                <td><span class="font-semibold text-slate-300">2 GB</span></td>
+                <td><span class="font-semibold text-slate-300">4 GB</span></td>
+                <td><span class="text-slate-500 text-xs">64-bit Only</span></td>
+                <td><span class="text-slate-300 text-xs">Cinnamon / XFCE / MATE</span></td>
+                <td><code class="px-1.5 py-0.5 rounded bg-slate-900 text-slate-300 text-[11px] border border-slate-800 font-mono">APT / Flatpak</code></td>
+                <td><span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[11px] font-semibold">Sangat Mudah</span></td>
+                <td class="text-right">
+                  <div class="inline-flex items-center gap-1.5">
+                    <button onclick="openDistroDetail('linux-mint')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors">
+                      <i class="fa-solid fa-circle-info text-cyan-400"></i> Detail
+                    </button>
+                    <a href="https://linuxmint.com/download.php" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/30 transition-colors flex items-center gap-1">
+                      <i class="fa-solid fa-download"></i> Unduh
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-800/40 transition-colors">
+                <td>
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-700/80 p-1 flex items-center justify-center flex-shrink-0">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Antix-logo.png" alt="antiX Linux" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                      <div class="font-bold text-white text-xs sm:text-sm">antiX Linux</div>
+                      <div class="text-[11px] text-slate-400">Penyelamat Laptop Jadul (No systemd)</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-xs font-mono border border-slate-700/60">Debian Stable</span></td>
+                <td><span class="font-semibold text-emerald-400">256 MB</span></td>
+                <td><span class="font-semibold text-slate-300">1 GB</span></td>
+                <td><span class="text-emerald-400 font-bold text-xs flex items-center gap-1"><i class="fa-solid fa-check"></i> Ya (32-bit)</span></td>
+                <td><span class="text-slate-300 text-xs">IceWM / Fluxbox</span></td>
+                <td><code class="px-1.5 py-0.5 rounded bg-slate-900 text-slate-300 text-[11px] border border-slate-800 font-mono">APT</code></td>
+                <td><span class="px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 text-[11px] font-semibold">Menengah</span></td>
+                <td class="text-right">
+                  <div class="inline-flex items-center gap-1.5">
+                    <button onclick="openDistroDetail('antix-linux')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors">
+                      <i class="fa-solid fa-circle-info text-cyan-400"></i> Detail
+                    </button>
+                    <a href="https://antixlinux.com/download/" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/30 transition-colors flex items-center gap-1">
+                      <i class="fa-solid fa-download"></i> Unduh
+                    </a>
+                  </div>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-800/40 transition-colors">
+                <td>
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-700/80 p-1 flex items-center justify-center flex-shrink-0">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Zorin_Logomark.svg" alt="Zorin OS" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                      <div class="font-bold text-white text-xs sm:text-sm">Zorin OS</div>
+                      <div class="text-[11px] text-slate-400">Desain Paling Elegan & Modern</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-xs font-mono border border-slate-700/60">Ubuntu LTS</span></td>
+                <td><span class="font-semibold text-slate-300">1.5 GB</span></td>
+                <td><span class="font-semibold text-slate-300">4 GB</span></td>
+                <td><span class="text-slate-500 text-xs">64-bit Only</span></td>
+                <td><span class="text-slate-300 text-xs">GNOME / XFCE Lite</span></td>
+                <td><code class="px-1.5 py-0.5 rounded bg-slate-900 text-slate-300 text-[11px] border border-slate-800 font-mono">APT / Flatpak</code></td>
+                <td><span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[11px] font-semibold">Sangat Mudah</span></td>
+                <td class="text-right">
+                  <div class="inline-flex items-center gap-1.5">
+                    <button onclick="openDistroDetail('zorin-os')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors">
+                      <i class="fa-solid fa-circle-info text-cyan-400"></i> Detail
+                    </button>
+                    <a href="https://zorin.com/os/download/" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/30 transition-colors flex items-center gap-1">
+                      <i class="fa-solid fa-download"></i> Unduh
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-4 flex flex-wrap items-center justify-between text-xs text-slate-400 gap-2">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> 32-bit Ready (Prosesor Lawas)</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-slate-600 inline-block"></span> 64-bit Only</span>
+          </div>
+          <div>
+            <span>💡 Klik tombol <strong>Detail</strong> untuk melihat panduan instalasi dan perintah terminal distro.</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Floating Comparison Drawer -->
+  <aside id="comparison-drawer" class="fixed bottom-5 right-5 z-40 hidden">
+    <div class="glass-card rounded-2xl p-4 border border-emerald-500/40 shadow-2xl shadow-emerald-500/20 flex items-center gap-4 animate-bounce-slow">
+      <div class="flex items-center gap-2">
+        <span class="w-7 h-7 rounded-full bg-emerald-500 text-slate-950 font-bold flex items-center justify-center text-xs" id="compare-count-badge">0</span>
+        <span class="text-xs font-semibold text-slate-200">Distro dipilih untuk dibandingkan</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="openComparisonModal()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs transition-colors flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-code-compare"></i>
+          <span>Bandingkan Sekarang</span>
+        </button>
+        <button onclick="clearComparison()" class="p-2 text-slate-400 hover:text-rose-400 text-xs transition-colors" title="Batalkan Semua">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Distro Detail Modal -->
+  <div id="detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
+    <div class="glass-card bg-slate-900 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-slate-700 shadow-2xl relative" onclick="event.stopPropagation()">
+      <div id="detail-modal-content">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Modal -->
+  <div id="compare-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden">
+    <div class="glass-card bg-slate-900 rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto border border-slate-700 shadow-2xl relative p-6 sm:p-8" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
+        <h3 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
+          <i class="fa-solid fa-code-compare text-emerald-400"></i>
+          <span>Perbandingan Spesifikasi & Fitur Distro</span>
+        </h3>
+        <button onclick="closeModal('compare-modal')" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="compare-modal-content" class="overflow-x-auto">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Beginner Guide Modal -->
+  <div id="guide-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
+    <div class="glass-card bg-slate-900 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-slate-700 shadow-2xl p-6 sm:p-8 relative" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
+        <h3 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
+          <i class="fa-solid fa-book-open text-amber-400"></i>
+          <span>Panduan Memasang Linux untuk Pemula</span>
+        </h3>
+        <button onclick="closeModal('guide-modal')" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-6 text-sm text-slate-300">
+        <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-start gap-3">
+          <i class="fa-solid fa-circle-check text-emerald-400 mt-0.5 text-base"></i>
+          <div>
+            <h4 class="font-bold text-emerald-300">Kabar Gembira: Anda Bisa Coba Dulu Tanpa Install!</h4>
+            <p class="text-xs text-slate-300 mt-1">Hampir semua Linux modern memiliki fitur <strong>"Live USB"</strong>. Artinya, Anda bisa mencoba sistem operasi Linux langsung dari flashdisk tanpa menyentuh data Windows atau harddisk Anda sama sekali.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center mb-3">1</div>
+            <h5 class="font-semibold text-white mb-1">Download File ISO</h5>
+            <p class="text-xs text-slate-400">Kunjungi website resmi distro pilihan Anda (tersedia tombol di kartu hasil) lalu unduh berkas berekstensi <code>.iso</code> (ukuran berkisar 1GB - 3GB).</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700">
+            <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 font-bold flex items-center justify-center mb-3">2</div>
+            <h5 class="font-semibold text-white mb-1">Buat Bootable Flashdisk</h5>
+            <p class="text-xs text-slate-400">Gunakan aplikasi gratis seperti <strong>Rufus</strong> atau <strong>Ventoy</strong> di Windows. Colokkan flashdisk (min. 8GB), pilih file ISO tadi, lalu klik Start.</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700">
+            <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center mb-3">3</div>
+            <h5 class="font-semibold text-white mb-1">Boot Lewat Flashdisk</h5>
+            <p class="text-xs text-slate-400">Restart komputer Anda, lalu tekan tombol Boot Menu berkali-kali saat logo komputer menyala (biasanya tombol <kbd class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 font-mono text-[11px]">F12</kbd>, <kbd class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 font-mono text-[11px]">F2</kbd>, <kbd class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 font-mono text-[11px]">F9</kbd>, atau <kbd class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-700 font-mono text-[11px]">Esc</kbd>).</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700">
+            <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center mb-3">4</div>
+            <h5 class="font-semibold text-white mb-1">Coba & Pasang (Dual-Boot)</h5>
+            <p class="text-xs text-slate-400">Pilih "Try Linux". Anda bisa browsing, tes audio, WiFi. Jika merasa cocok, klik ikon "Install" di desktop untuk memasangnya berdampingan dengan Windows (Dual-Boot) atau menggantikannya.</p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-800/90 border border-slate-700 flex justify-end">
+          <button onclick="closeModal('guide-modal')" class="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs transition-colors">
+            Saya Mengerti, Tutup Panduan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Windows Spec Tips Modal -->
+  <div id="windows-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
+    <div class="glass-card bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-slate-700 shadow-2xl p-6 sm:p-8 relative" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
+        <h3 class="text-xl font-bold text-white flex items-center gap-2.5">
+          <i class="fa-brands fa-windows text-blue-400"></i>
+          <span>Cara Melihat Spek Komputer di Windows</span>
+        </h3>
+        <button onclick="closeModal('windows-modal')" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs sm:text-sm text-slate-300">
+        <div class="p-3.5 rounded-xl bg-slate-800/70 border border-slate-700">
+          <h4 class="font-bold text-emerald-400 mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Cara 1: Lewat Task Manager (Paling Cepat)</span>
+          </h4>
+          <p class="text-xs text-slate-400 mb-2">Tekan kombinasi tombol <kbd class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-700 font-mono text-[11px]">Ctrl + Shift + Esc</kbd>, lalu klik tab <strong>Performance</strong>.</p>
+          <ul class="list-disc list-inside space-y-1 text-xs text-slate-300">
+            <li><strong>CPU:</strong> Menampilkan nama prosesor, kecepatan, dan jumlah Cores / Logical processors.</li>
+            <li><strong>Memory:</strong> Menampilkan total kapasitas RAM (misal 4.0 GB atau 8.0 GB).</li>
+            <li><strong>Disk:</strong> Menampilkan tipe penyimpanan (SSD atau HDD) dan sisa kapasitas.</li>
+            <li><strong>GPU:</strong> Menampilkan tipe kartu grafis (Intel, NVIDIA, atau AMD).</li>
+          </ul>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-800/70 border border-slate-700">
+          <h4 class="font-bold text-cyan-400 mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-terminal"></i>
+            <span>Cara 2: Lewat DirectX Diagnostic (dxdiag)</span>
+          </h4>
+          <p class="text-xs text-slate-400 mb-2">Tekan <kbd class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-700 font-mono text-[11px]">Windows + R</kbd>, ketik <code class="px-1.5 py-0.5 rounded bg-slate-950 text-emerald-300 border border-slate-700 font-mono">dxdiag</code> lalu tekan Enter.</p>
+          <p class="text-xs text-slate-300">Pada tab <strong>System</strong>, Anda bisa melihat apakah OS Anda 32-bit atau 64-bit serta total kapasitas Memory RAM secara akurat.</p>
+        </div>
+
+        <div class="flex justify-end pt-2">
+          <button onclick="closeModal('windows-modal')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-slate-800/80 bg-slate-950/90 backdrop-blur-md py-10 text-center text-xs relative overflow-hidden">
+    <!-- Animated background glow in footer -->
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none animate-aurora-1"></div>
+
+    <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center gap-6 relative z-10">
+      
+      <!-- Prominent Creator Badge with requested text -->
+      <div class="creator-badge px-6 py-3.5 rounded-2xl flex items-center gap-3 text-sm font-bold text-white shadow-xl cursor-default">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-500 to-cyan-400 flex items-center justify-center text-slate-950 text-sm shadow-md animate-float">
+          <i class="fa-solid fa-code"></i>
+        </div>
+        <div class="flex items-center gap-2.5 flex-wrap justify-center">
+          <span class="tracking-wide bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent font-extrabold text-base animate-shimmer-text">
+            Created By Rafif 100% Tidak Sadar
+          </span>
+          <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] border border-emerald-500/40 font-semibold animate-pulse-soft">
+            ⚡ 100% Client-Side JS
+          </span>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between w-full pt-4 border-t border-slate-800/60 text-slate-400 gap-4">
+        <div class="flex items-center gap-2">
+          <i class="fa-brands fa-linux text-emerald-400 text-base animate-bounce-slow"></i>
+          <span class="font-medium text-slate-300">Linux Distro Matcher</span>
+          <span>&bull; Rekomendasi Pintar Hardware &bull; 17+ Distro Teruji</span>
+        </div>
+        <div class="flex items-center gap-3 text-slate-400">
+          <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5 py-1 px-2.5 rounded-lg hover:bg-slate-800/80">
+            <i class="fa-solid fa-arrow-up"></i>
+            <span>Kembali ke Atas</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts (Inline Standalone for 100% GitHub Pages Reliability) -->
+  <script>
+/**
+ * Database Distribusi Linux
+ */
+const LINUX_DISTROS = [
+  {
+    id: "linux-mint",
+    name: "Linux Mint",
+    tagline: "Distro paling ramah dan nyaman bagi pengguna yang migrasi dari Windows",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/3/3f/Linux_Mint_logo_without_wordmark.svg",
+    badge: "Paling Populer untuk Pemula",
+    base: "Ubuntu / Debian",
+    packageManager: "APT / Flatpak",
+    defaultDE: "Cinnamon / XFCE / MATE",
+    releaseModel: "LTS (Point Release, sangat stabil)",
+    minSpecs: { ramMB: 2048, storageGB: 20, cpuCores: 1, arch: ["x86_64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 4096, storageGB: 50, cpuCores: 2 },
+    weightProfile: { footprint: "medium", difficulty: "beginner", uiStyle: "windows", useCases: ["daily", "office", "multimedia", "student", "light-gaming"] },
+    nvidiaSupport: "excellent",
+    whyChoose: [
+      "Tampilan taskbar dan Start Menu sangat familiar mirip Windows 7/10/11.",
+      "Driver Manager otomatis mendeteksi WiFi dan kartu grafis NVIDIA tanpa ribet.",
+      "Software Manager lengkap dengan ribuan aplikasi siap pasang via klik mouse.",
+      "Sangat stabil, minim glitch, dan tidak membebani pengguna dengan update yang merusak sistem."
+    ],
+    pros: ["Transisi termudah dari Windows tanpa hafal Terminal.", "Tersedia edisi XFCE yang ringan untuk RAM 2GB-4GB.", "Komunitas Indonesia sangat besar."],
+    cons: ["Bukan edisi bleeding-edge.", "Sudah menghentikan dukungan 32-bit."],
+    officialUrl: "https://linuxmint.com/", downloadUrl: "https://linuxmint.com/download.php", distroWatchUrl: "https://distrowatch.com/table.php?distribution=mint"
+  },
+  {
+    id: "zorin-os",
+    name: "Zorin OS (Core & Lite)",
+    tagline: "Alternatif Windows & macOS dengan antarmuka modern yang sangat memukau",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Zorin_Logomark.svg",
+    badge: "Desain Paling Elegan",
+    base: "Ubuntu",
+    packageManager: "APT / Flatpak / Snap",
+    defaultDE: "GNOME (Core) / XFCE (Lite)",
+    releaseModel: "LTS (Point Release)",
+    minSpecs: { ramMB: 1536, storageGB: 15, cpuCores: 1, arch: ["x86_64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 4096, storageGB: 40, cpuCores: 2 },
+    weightProfile: { footprint: "medium", difficulty: "beginner", uiStyle: "windows", useCases: ["daily", "office", "design", "student"] },
+    nvidiaSupport: "excellent",
+    whyChoose: [
+      "Fitur 'Zorin Appearance' memungkinkan ganti gaya desktop mirip Windows, macOS, atau Ubuntu dalam 1 klik.",
+      "Zorin Windows App Support bawaan untuk menjalankan installer file .exe Windows.",
+      "Zorin Connect untuk sinkronisasi notifikasi dan file dengan HP Android."
+    ],
+    pros: ["Visual sangat cantik, bersih, dan modern.", "Tersedia versi Lite untuk spek laptop lawas.", "Flatpak & Flathub terintegrasi langsung."],
+    cons: ["Versi Core membutuhkan minimal RAM 4GB untuk kenyamanan optimal."],
+    officialUrl: "https://zorin.com/os/", downloadUrl: "https://zorin.com/os/download/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=zorin"
+  },
+  {
+    id: "antix-linux",
+    name: "antiX Linux",
+    tagline: "Penyelamat laptop jadul & PC spesifikasi kentang, tanpa systemd",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/e/eb/Antix-logo.png",
+    badge: "Terbaik untuk PC Kentang & 32-bit",
+    base: "Debian Stable (Tanpa systemd)",
+    packageManager: "APT",
+    defaultDE: "IceWM / Fluxbox / JWM",
+    releaseModel: "Semi-rolling / Point",
+    minSpecs: { ramMB: 256, storageGB: 5, cpuCores: 1, arch: ["x86_64", "i386"], gpu: "legacy", bootMode: ["bios", "uefi"] },
+    recSpecs: { ramMB: 1024, storageGB: 15, cpuCores: 1 },
+    weightProfile: { footprint: "ultra-light", difficulty: "intermediate", uiStyle: "minimal", useCases: ["potato-pc", "old-hardware", "revival", "light-browsing", "server"] },
+    nvidiaSupport: "manual",
+    whyChoose: [
+      "Hanya memakan sekitar 150MB - 200MB RAM saat baru dinyalakan!",
+      "Tetap mendukung prosesor 32-bit lama (Pentium 4, Intel Atom, Core 2 Duo).",
+      "Tidak menggunakan systemd, membuatnya sangat ringan dan cepat saat booting."
+    ],
+    pros: ["Mampu menghidupkan kembali komputer jadul tahun 2005 - 2012.", "Berbasis Debian Stable yang terkenal tahan banting.", "Bisa Live USB persistent."],
+    cons: ["Tampilan retro klasik minimalis.", "Butuh adaptasi jika terbiasa dengan Windows modern."],
+    officialUrl: "https://antixlinux.com/", downloadUrl: "https://antixlinux.com/download/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=antix"
+  },
+  {
+    id: "puppy-linux",
+    name: "Puppy Linux (Fossapup / Bookworm)",
+    tagline: "Distro seukuran saku yang berjalan 100% di dalam RAM komputer",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Puppy_Linux_Logo.svg",
+    badge: "Ultra Ringan & Portabel",
+    base: "Ubuntu / Debian binary",
+    packageManager: "PPM / APT",
+    defaultDE: "JWM / Rox-Filer",
+    releaseModel: "Special",
+    minSpecs: { ramMB: 512, storageGB: 2, cpuCores: 1, arch: ["x86_64", "i386"], gpu: "legacy", bootMode: ["bios", "uefi"] },
+    recSpecs: { ramMB: 1024, storageGB: 8, cpuCores: 1 },
+    weightProfile: { footprint: "ultra-light", difficulty: "intermediate", uiStyle: "minimal", useCases: ["potato-pc", "rescue", "portable-usb", "low-storage"] },
+    nvidiaSupport: "manual",
+    whyChoose: [
+      "Seluruh sistem operasi dimuat langsung ke dalam RAM secepat kilat.",
+      "Bisa berjalan di komputer tanpa harddisk (cukup pakai Flashdisk).",
+      "Ukuran ISO unduhan hanya berkisar 300MB - 500MB saja!"
+    ],
+    pros: ["Sangat cepat di harddisk tua.", "Cocok sebagai rescue drive penyelamat data.", "Portabel di flashdisk USB."],
+    cons: ["Berjalan sebagai root secara default, kurang cocok multi-user harian."],
+    officialUrl: "https://puppylinux-woof-ce.github.io/", downloadUrl: "https://puppylinux-woof-ce.github.io/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=puppy"
+  },
+  {
+    id: "linux-lite",
+    name: "Linux Lite",
+    tagline: "Jembatan ideal dari Windows untuk laptop lawas dengan desktop XFCE ramah pemula",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Linux_Lite_feather_logo.svg",
+    badge: "Ringan & Mudah untuk Mantan Windows",
+    base: "Ubuntu LTS",
+    packageManager: "APT",
+    defaultDE: "XFCE Kustom",
+    releaseModel: "LTS (5 tahun dukungan)",
+    minSpecs: { ramMB: 1024, storageGB: 10, cpuCores: 1, arch: ["x86_64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 2048, storageGB: 25, cpuCores: 2 },
+    weightProfile: { footprint: "light", difficulty: "beginner", uiStyle: "windows", useCases: ["daily", "potato-pc", "office", "student"] },
+    nvidiaSupport: "good",
+    whyChoose: [
+      "Didesain khusus untuk mempermudah transisi dari Windows ke Linux bagi spek rendah.",
+      "Tersedia 'Lite Software' untuk install Chrome, Steam, Spotify, Zoom dengan 1 klik.",
+      "Dilengkapi panduan interaktif 'Lite Tweaks' untuk membersihkan cache sistem."
+    ],
+    pros: ["Konsumsi RAM sekitar 500MB idle.", "Kompatibilitas aplikasi dan driver Ubuntu LTS sangat terjamin.", "Menu grafis ramah pemula."],
+    cons: ["Hanya tersedia 64-bit.", "Tema standar sederhana."],
+    officialUrl: "https://www.linuxliteos.com/", downloadUrl: "https://www.linuxliteos.com/download.php", distroWatchUrl: "https://distrowatch.com/table.php?distribution=lite"
+  },
+  {
+    id: "lubuntu",
+    name: "Lubuntu",
+    tagline: "Varian resmi Ubuntu super ringan bertenaga lingkungan desktop LXQt",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Lubuntu_logo.svg",
+    badge: "Ubuntu Varian Paling Hemat Daya",
+    base: "Ubuntu",
+    packageManager: "APT / Snap",
+    defaultDE: "LXQt",
+    releaseModel: "LTS & Reguler",
+    minSpecs: { ramMB: 1024, storageGB: 10, cpuCores: 1, arch: ["x86_64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 2048, storageGB: 25, cpuCores: 2 },
+    weightProfile: { footprint: "light", difficulty: "beginner", uiStyle: "windows", useCases: ["potato-pc", "student", "office", "light-browsing"] },
+    nvidiaSupport: "good",
+    whyChoose: [
+      "Varian resmi Canonical Ubuntu dengan konsumsi memori terendah.",
+      "Menggunakan LXQt yang sangat efisien dalam penggunaan prosesor dan baterai laptop.",
+      "Akses penuh ke seluruh repositori software Ubuntu melimpah."
+    ],
+    pros: ["RAM idle hanya 350MB - 450MB.", "Stabil dan rutin dapat patch pembaruan keamanan.", "Cocok untuk netbook lawas."],
+    cons: ["Tampilan standar LXQt cenderung kaku."],
+    officialUrl: "https://lubuntu.me/", downloadUrl: "https://lubuntu.me/downloads/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=lubuntu"
+  },
+  {
+    id: "q4os",
+    name: "Q4OS",
+    tagline: "Distro super kencang bergaya Windows XP / 7 klasik dengan desktop Trinity",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/e/e6/Q4OS_Logo.svg",
+    badge: "Nostalgia Windows & Sangat Ringan",
+    base: "Debian Stable",
+    packageManager: "APT",
+    defaultDE: "Trinity (TDE) / KDE Plasma",
+    releaseModel: "LTS (Rock Solid)",
+    minSpecs: { ramMB: 350, storageGB: 5, cpuCores: 1, arch: ["x86_64", "i386", "arm64"], gpu: "legacy", bootMode: ["bios", "uefi"] },
+    recSpecs: { ramMB: 1024, storageGB: 15, cpuCores: 1 },
+    weightProfile: { footprint: "ultra-light", difficulty: "beginner", uiStyle: "windows", useCases: ["potato-pc", "office", "old-hardware", "revival"] },
+    nvidiaSupport: "good",
+    whyChoose: [
+      "Edisi Trinity sangat mirip dengan Windows XP / 7 klasik yang mudah dipahami.",
+      "Masih menyediakan versi 32-bit untuk komputer sangat tua.",
+      "Tersedia installer unik yang bisa diinstall berdampingan langsung dari dalam Windows!"
+    ],
+    pros: ["Super ringan pada prosesor 300MHz sekalipun.", "Debian Stable minim crash.", "Fitur Desktop Profiler fleksibel."],
+    cons: ["Ikon dan grafis bernuansa retro 2000-an."],
+    officialUrl: "https://q4os.org/", downloadUrl: "https://q4os.org/downloads1.html", distroWatchUrl: "https://distrowatch.com/table.php?distribution=q4os"
+  },
+  {
+    id: "bodhi-linux",
+    name: "Bodhi Linux",
+    tagline: "Distro minimalis bertenaga Moksha Desktop yang artistik dan sangat hemat RAM",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/8/87/Bodhi_Linux_Logo.png",
+    badge: "Minimalis & Estetis di Spek Rendah",
+    base: "Ubuntu LTS",
+    packageManager: "APT",
+    defaultDE: "Moksha Desktop",
+    releaseModel: "LTS",
+    minSpecs: { ramMB: 512, storageGB: 5, cpuCores: 1, arch: ["x86_64", "i386"], gpu: "legacy", bootMode: ["bios", "uefi"] },
+    recSpecs: { ramMB: 1024, storageGB: 15, cpuCores: 1 },
+    weightProfile: { footprint: "ultra-light", difficulty: "intermediate", uiStyle: "minimal", useCases: ["potato-pc", "old-hardware", "customization"] },
+    nvidiaSupport: "good",
+    whyChoose: [
+      "Hanya menginstal aplikasi esensial (filosofi minimalis bebas bloatware).",
+      "Moksha Desktop memberikan animasi visual halus tanpa membebani GPU.",
+      "Edisi Legacy bisa berjalan di prosesor 32-bit non-PAE."
+    ],
+    pros: ["RAM idle hanya 250MB - 300MB.", "Visual animasi tetap menawan di laptop tua.", "Sistem bersih dan ringan."],
+    cons: ["Perlu menginstal browser & office sendiri di awal."],
+    officialUrl: "https://www.bodhilinux.com/", downloadUrl: "https://www.bodhilinux.com/download/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=bodhi"
+  },
+  {
+    id: "mx-linux",
+    name: "MX Linux",
+    tagline: "Juara peringkat 1 DistroWatch bertahun-tahun berkat stabilitas dan fitur MX Tools",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/d/d4/Mx_Linux_logo.svg",
+    badge: "Peringkat #1 Kepuasan Pengguna",
+    base: "Debian Stable",
+    packageManager: "APT / Flatpak",
+    defaultDE: "XFCE / KDE Plasma / Fluxbox",
+    releaseModel: "Point Release",
+    minSpecs: { ramMB: 1024, storageGB: 10, cpuCores: 1, arch: ["x86_64", "i386"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 4096, storageGB: 30, cpuCores: 2 },
+    weightProfile: { footprint: "light", difficulty: "beginner", uiStyle: "windows", useCases: ["daily", "office", "student", "multimedia", "old-hardware"] },
+    nvidiaSupport: "excellent",
+    whyChoose: [
+      "Fitur 'MX Tools' menyediakan puluhan alat praktis GUI pembuat live USB snapshot dan installer driver Nvidia.",
+      "Pilihan antara systemd atau init sistem tradisional sysVinit.",
+      "Stabilitas Debian Stable dengan paket aplikasi diperbarui secara cerdas."
+    ],
+    pros: ["Keseimbangan hemat performa dan kelengkapan fitur.", "Masih menyediakan edisi 32-bit.", "MX Package Installer sangat lengkap."],
+    cons: ["Tata letak panel default berada di sisi kiri (bisa dipindah dalam 2 klik)."],
+    officialUrl: "https://mxlinux.org/", downloadUrl: "https://mxlinux.org/download-links/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=mx"
+  },
+  {
+    id: "pop-os",
+    name: "Pop!_OS",
+    tagline: "Distro terbaik untuk produktivitas, programmer, dan pengguna kartu grafis NVIDIA",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/6d/Pop_OS_Icon.svg",
+    badge: "Juara untuk Programmer & NVIDIA",
+    base: "Ubuntu",
+    packageManager: "APT / Flatpak",
+    defaultDE: "COSMIC (GNOME Based)",
+    releaseModel: "LTS & Modern",
+    minSpecs: { ramMB: 4096, storageGB: 20, cpuCores: 2, arch: ["x86_64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 8192, storageGB: 50, cpuCores: 4 },
+    weightProfile: { footprint: "heavy", difficulty: "beginner", uiStyle: "modern", useCases: ["programming", "gaming", "daily", "design", "office"] },
+    nvidiaSupport: "excellent",
+    whyChoose: [
+      "Menyediakan file ISO khusus NVIDIA dengan driver GPU terpasang otomatis.",
+      "Fitur Auto-Tiling Window canggih untuk menyusun jendela aplikasi otomatis efisiensi coding.",
+      "Enkripsi disk bawaan dan Pop!_Shop bersih tanpa iklan."
+    ],
+    pros: ["Pilihan #1 developer web, mobile, dan data science.", "Manajemen daya baterai laptop pintar.", "Dukungan hybrid GPU mulus."],
+    cons: ["Membutuhkan RAM minimal 4GB-8GB.", "Tidak cocok untuk komputer lawas 32-bit."],
+    officialUrl: "https://pop.system76.com/", downloadUrl: "https://pop.system76.com/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=popos"
+  },
+  {
+    id: "nobara-project",
+    name: "Nobara Project",
+    tagline: "Distro gaming siap tempur berbasis Fedora dengan patch kernel khusus gaming",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/65/Nobara_Logo.png",
+    badge: "Spesialis Gaming & Content Creation",
+    base: "Fedora",
+    packageManager: "DNF / RPM / Flatpak",
+    defaultDE: "KDE Plasma / GNOME",
+    releaseModel: "Rolling-like Point Release",
+    minSpecs: { ramMB: 4096, storageGB: 30, cpuCores: 2, arch: ["x86_64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 16384, storageGB: 80, cpuCores: 4 },
+    weightProfile: { footprint: "heavy", difficulty: "intermediate", uiStyle: "windows", useCases: ["gaming", "streaming", "multimedia", "daily"] },
+    nvidiaSupport: "excellent",
+    whyChoose: [
+      "Diciptakan oleh GloriousEggroll (pembuat Proton-GE untuk Steam Deck & Linux gaming).",
+      "Pre-installed: Steam, Lutris, Wine, Proton-GE, OBS Studio dengan NVENC patch.",
+      "Kernel Linux sudah dituning latensi rendah untuk frame-rate game stabil."
+    ],
+    pros: ["Langsung main game Windows tanpa utak-atik WINE rumit.", "Dukungan penuh Steam, Epic Games, GOG, dan emulator.", "KDE Plasma modern."],
+    cons: ["Membutuhkan hardware gaming (RAM 8GB-16GB direkomendasikan)."],
+    officialUrl: "https://nobaraproject.org/", downloadUrl: "https://nobaraproject.org/download-nobara/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=nobara"
+  },
+  {
+    id: "bazzite",
+    name: "Bazzite",
+    tagline: "Sistem operasi gaming ala SteamOS untuk PC desktop, laptop, dan handheld gaming",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Bazzite_logo.svg",
+    badge: "Pengalaman SteamOS di PC Biasa",
+    base: "Fedora Atomic",
+    packageManager: "rpm-ostree / Flatpak",
+    defaultDE: "KDE Plasma / Game Mode",
+    releaseModel: "Immutable Rolling",
+    minSpecs: { ramMB: 8192, storageGB: 40, cpuCores: 4, arch: ["x86_64"], gpu: "any", bootMode: ["uefi"] },
+    recSpecs: { ramMB: 16384, storageGB: 100, cpuCores: 6 },
+    weightProfile: { footprint: "heavy", difficulty: "intermediate", uiStyle: "modern", useCases: ["gaming", "living-room-pc", "multimedia"] },
+    nvidiaSupport: "excellent",
+    whyChoose: [
+      "Sistem operasi 'Immutable' (anti-rusak): sistem inti terkunci sehingga update tidak akan crash.",
+      "Bisa boot langsung ke tampilan antarmuka Steam Big Picture layaknya konsol game.",
+      "Dukungan otomatis untuk gamepad Xbox, DualSense PS5, Switch Pro, dan ROG Ally."
+    ],
+    pros: ["Pengalaman konsol game terbaik di PC dan laptop.", "Fitur rollback otomatis saat boot jika ada error.", "Driver GPU terintegrasi."],
+    cons: ["Sistem immutable butuh adaptasi software lewat Flatpak.", "Hanya mendukung UEFI 64-bit."],
+    officialUrl: "https://bazzite.gg/", downloadUrl: "https://bazzite.gg/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=bazzite"
+  },
+  {
+    id: "fedora-workstation",
+    name: "Fedora Workstation",
+    tagline: "Inovatif, murni open-source, dan menjadi standar emas industri teknologi modern",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/3/3f/Fedora_logo.svg",
+    badge: "Pilihan Eksekutif & Dev Modern",
+    base: "Independent (Red Hat)",
+    packageManager: "DNF / Flatpak",
+    defaultDE: "GNOME Pure",
+    releaseModel: "Point Release",
+    minSpecs: { ramMB: 2048, storageGB: 20, cpuCores: 2, arch: ["x86_64", "arm64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 8192, storageGB: 50, cpuCores: 4 },
+    weightProfile: { footprint: "medium", difficulty: "intermediate", uiStyle: "modern", useCases: ["programming", "daily", "office", "student", "server"] },
+    nvidiaSupport: "good",
+    whyChoose: [
+      "Pilihan pribadi Linus Torvalds di laptopnya.",
+      "Selalu menggunakan teknologi Linux mutakhir: Wayland, PipeWire, kernel terbaru.",
+      "Basis upstream dari Red Hat Enterprise Linux (RHEL)."
+    ],
+    pros: ["Gesture touchpad sangat mulus layaknya macOS.", "Dukungan Docker dan Podman terbaik.", "Sangat stabil untuk dev."],
+    cons: ["Codec multimedia dan driver Nvidia butuh aktivasi RPM Fusion."],
+    officialUrl: "https://fedoraproject.org/", downloadUrl: "https://fedoraproject.org/workstation/download/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=fedora"
+  },
+  {
+    id: "ubuntu-desktop",
+    name: "Ubuntu Desktop",
+    tagline: "Distro Linux paling terkenal di dunia dengan dukungan aplikasi dan tutorial terlengkap",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg",
+    badge: "Standar Ekosistem Linux Dunia",
+    base: "Debian",
+    packageManager: "APT / Snap",
+    defaultDE: "GNOME Kustom",
+    releaseModel: "LTS & Reguler",
+    minSpecs: { ramMB: 4096, storageGB: 25, cpuCores: 2, arch: ["x86_64", "arm64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 8192, storageGB: 60, cpuCores: 4 },
+    weightProfile: { footprint: "heavy", difficulty: "beginner", uiStyle: "modern", useCases: ["daily", "programming", "office", "server", "student"] },
+    nvidiaSupport: "excellent",
+    whyChoose: [
+      "Hampir seluruh software dan tutorial di dunia pasti mendukung Ubuntu.",
+      "Komunitas forum AskUbuntu sangat masif.",
+      "Dukungan jangka panjang (LTS) 5-10 tahun."
+    ],
+    pros: ["Ekosistem terlengkap.", "Deteksi hardware laptop sangat matang.", "Installer dual-boot sangat aman."],
+    cons: ["Cukup berat di hardware lawas atau HDD mekanik."],
+    officialUrl: "https://ubuntu.com/", downloadUrl: "https://ubuntu.com/download/desktop", distroWatchUrl: "https://distrowatch.com/table.php?distribution=ubuntu"
+  },
+  {
+    id: "manjaro-linux",
+    name: "Manjaro Linux",
+    tagline: "Kekuatan bleeding-edge Arch Linux yang dikemas ramah dan siap pakai bagi pemula",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/a/a5/Manjaro_logo_text.png",
+    badge: "Arch Linux untuk Semua Orang",
+    base: "Arch Linux",
+    packageManager: "Pamac / Pacman / AUR",
+    defaultDE: "XFCE / KDE Plasma / GNOME",
+    releaseModel: "Rolling Release",
+    minSpecs: { ramMB: 2048, storageGB: 30, cpuCores: 2, arch: ["x86_64", "arm64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 8192, storageGB: 50, cpuCores: 4 },
+    weightProfile: { footprint: "medium", difficulty: "intermediate", uiStyle: "windows", useCases: ["daily", "gaming", "programming", "customization"] },
+    nvidiaSupport: "excellent",
+    whyChoose: [
+      "Model Rolling Release: install sekali, sistem terus update selamanya tanpa install ulang.",
+      "Akses ke AUR (Arch User Repository): perpustakaan software terlengkap di Linux.",
+      "Pamac Software Manager grafis mempermudah pasang driver dan kernel."
+    ],
+    pros: ["Software selalu versi terbaru.", "Hardware Detection Tool otomatis memasang driver tepat.", "Varian XFCE hemat RAM."],
+    cons: ["Perlu perhatian pengguna saat update berkala."],
+    officialUrl: "https://manjaro.org/", downloadUrl: "https://manjaro.org/download/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=manjaro"
+  },
+  {
+    id: "endeavouros",
+    name: "EndeavourOS",
+    tagline: "Distro terminal-centric berbasis Arch murni dengan komunitas yang luar biasa hangat",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/3/3a/EndeavourOS_Logo.svg",
+    badge: "Favorit Komunitas Linux Antusias",
+    base: "Arch Linux (Pure Arch)",
+    packageManager: "Pacman / Yay (AUR)",
+    defaultDE: "XFCE / KDE / GNOME / i3",
+    releaseModel: "Rolling Release",
+    minSpecs: { ramMB: 2048, storageGB: 20, cpuCores: 2, arch: ["x86_64", "arm64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 8192, storageGB: 50, cpuCores: 4 },
+    weightProfile: { footprint: "light", difficulty: "intermediate", uiStyle: "minimal", useCases: ["programming", "customization", "gaming", "daily"] },
+    nvidiaSupport: "excellent",
+    whyChoose: [
+      "Pengalaman instalasi Arch Linux yang bersih via Calamares GUI installer.",
+      "Nol bloatware, sistem sangat kencang dan murni.",
+      "Komunitas forum EndeavourOS terkenal paling ramah membimbing pemula belajar Arch."
+    ],
+    pros: ["Sangat responsif dan ringan.", "Pilihan desktop bebas dipilih saat install.", "Update langsung dari Arch resmi."],
+    cons: ["Dibutuhkan sedikit kemauan belajar perintah terminal."],
+    officialUrl: "https://endeavouros.com/", downloadUrl: "https://endeavouros.com/latest-release/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=endeavour"
+  },
+  {
+    id: "debian-stable",
+    name: "Debian GNU/Linux",
+    tagline: "'The Universal Operating System' yang legendaris, batu karang kestabilan sejati",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/66/Openlogo-debianV2.svg",
+    badge: "Pondasi Kestabilan Tertinggi",
+    base: "Independent",
+    packageManager: "APT",
+    defaultDE: "GNOME / XFCE / KDE / LXQt",
+    releaseModel: "Point Release",
+    minSpecs: { ramMB: 1024, storageGB: 10, cpuCores: 1, arch: ["x86_64", "i386", "arm64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 4096, storageGB: 30, cpuCores: 2 },
+    weightProfile: { footprint: "light", difficulty: "intermediate", uiStyle: "windows", useCases: ["server", "potato-pc", "programming", "daily", "office"] },
+    nvidiaSupport: "good",
+    whyChoose: [
+      "Stabilitas nomor 1 di dunia, bisa menyala berbulan-bulan tanpa crash.",
+      "Firmware driver WiFi dan GPU non-free sudah disertakan otomatis.",
+      "Dukungan arsitektur prosesor terlengkap di dunia (dari 32-bit hingga server)."
+    ],
+    pros: ["100% dikembangkan komunitas relawan nirlaba.", "Sangat hemat sumber daya di XFCE/LXQt.", "Pilihan utama server/homelab."],
+    cons: ["Versi software di repositori cenderung versi lama yang stabil."],
+    officialUrl: "https://www.debian.org/", downloadUrl: "https://www.debian.org/distrib/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=debian"
+  },
+  {
+    id: "elementary-os",
+    name: "elementary OS",
+    tagline: "Distro berestetika tinggi yang didesain presisi ala ekosistem macOS",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/8/83/Elementary_logo.svg",
+    badge: "Estetika & Desain Mirip Mac",
+    base: "Ubuntu LTS",
+    packageManager: "AppCenter / Flatpak / APT",
+    defaultDE: "Pantheon Desktop",
+    releaseModel: "LTS",
+    minSpecs: { ramMB: 4096, storageGB: 20, cpuCores: 2, arch: ["x86_64"], gpu: "any", bootMode: ["uefi"] },
+    recSpecs: { ramMB: 8192, storageGB: 50, cpuCores: 4 },
+    weightProfile: { footprint: "medium", difficulty: "beginner", uiStyle: "macos", useCases: ["design", "daily", "student", "office"] },
+    nvidiaSupport: "good",
+    whyChoose: [
+      "Desain antarmuka Pantheon sangat bersih, konsisten, elegan dengan dock di bawah persis macOS.",
+      "AppCenter unik dengan model 'Pay what you can' yang mendukung developer aplikasi independen.",
+      "Privasi ketat, tidak ada telemetri pelacakan."
+    ],
+    pros: ["Pengalaman visual paling rapi dan minim distraksi di ekosistem Linux.", "Multitasking gesture intuitif."],
+    cons: ["Kustomisasi desktop sengaja dibatasi developer demi konsistensi."],
+    officialUrl: "https://elementary.io/", downloadUrl: "https://elementary.io/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=elementary"
+  },
+  {
+    id: "peppermint-os",
+    name: "Peppermint OS",
+    tagline: "Distro minimalis berbasis Debian/Devuan dengan integrasi Cloud & Web Apps yang lincah",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/3/32/Peppermint_OS_Logo.png",
+    badge: "Ringan & Fleksibel",
+    base: "Debian / Devuan",
+    packageManager: "APT / Flatpak / Snap",
+    defaultDE: "XFCE",
+    releaseModel: "Semi-rolling",
+    minSpecs: { ramMB: 1024, storageGB: 10, cpuCores: 1, arch: ["x86_64", "i386"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 2048, storageGB: 20, cpuCores: 2 },
+    weightProfile: { footprint: "light", difficulty: "beginner", uiStyle: "windows", useCases: ["potato-pc", "student", "office", "web-apps"] },
+    nvidiaSupport: "good",
+    whyChoose: [
+      "Aplikasi 'Kumo' untuk mengubah website favorit menjadi aplikasi desktop.",
+      "Tersedia edisi 'Devuan' bagi yang ingin sistem tanpa systemd.",
+      "Sistem sangat ramping bebas bloatware."
+    ],
+    pros: ["Penggunaan RAM sangat irit untuk laptop 2GB.", "Pilihan Debian atau Devuan."],
+    cons: ["Butuh koneksi internet baik saat instalasi awal."],
+    officialUrl: "https://peppermintos.com/", downloadUrl: "https://peppermintos.com/guide/downloading/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=peppermint"
+  },
+  {
+    id: "tails-linux",
+    name: "Tails OS",
+    tagline: "Distro keamanan privasi tinggi Edward Snowden yang tidak meninggalkan jejak digital",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/2/23/Tails_logo_and_wordmark.svg",
+    badge: "Keamanan & Privasi Mutlak",
+    base: "Debian",
+    packageManager: "APT",
+    defaultDE: "GNOME Minimal",
+    releaseModel: "Live OS",
+    minSpecs: { ramMB: 2048, storageGB: 8, cpuCores: 1, arch: ["x86_64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 4096, storageGB: 16, cpuCores: 2 },
+    weightProfile: { footprint: "light", difficulty: "intermediate", uiStyle: "windows", useCases: ["privacy", "portable-usb"] },
+    nvidiaSupport: "good",
+    whyChoose: [
+      "Semua koneksi internet dipaksa melewati jaringan anonim Tor Network.",
+      "Sistem berjalan 100% di RAM dan terhapus bersih saat dimatikan.",
+      "Tidak menyentuh harddisk bawaan laptop sehingga data Windows aman."
+    ],
+    pros: ["Perlindungan privasi digital terkuat.", "Mudah dibawa dalam saku via flashdisk."],
+    cons: ["Bukan untuk OS permanen di harddisk."],
+    officialUrl: "https://tails.net/", downloadUrl: "https://tails.net/install/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=tails"
+  },
+  {
+    id: "kali-linux",
+    name: "Kali Linux",
+    tagline: "Distro standar industri keamanan siber dan uji penetrasi (Penetration Testing)",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Kali-dragon-icon.svg",
+    badge: "Spesialis Hacking Etis & Cyber Security",
+    base: "Debian Testing",
+    packageManager: "APT",
+    defaultDE: "XFCE / GNOME / KDE",
+    releaseModel: "Rolling Release",
+    minSpecs: { ramMB: 2048, storageGB: 20, cpuCores: 2, arch: ["x86_64", "arm64", "i386"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 8192, storageGB: 50, cpuCores: 4 },
+    weightProfile: { footprint: "medium", difficulty: "advanced", uiStyle: "windows", useCases: ["security", "student", "server"] },
+    nvidiaSupport: "good",
+    whyChoose: [
+      "Sudah terisi lebih dari 600 alat pentest siap pakai: Wireshark, Nmap, Metasploit, Burp Suite.",
+      "Mendukung 'Kali Undercover' yang mengubah tampilan menjadi Windows 10 agar tidak mencurigakan.",
+      "Standar industri mahasiswa IT dan praktisi cyber security."
+    ],
+    pros: ["Tidak perlu instalasi manual ratusan tools hacking rumit.", "Dukungan luas monitor mode WiFi."],
+    cons: ["SANGAT TIDAK DIREKOMENDASIKAN untuk pemula atau penggunaan harian biasa."],
+    officialUrl: "https://www.kali.org/", downloadUrl: "https://www.kali.org/get-kali/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=kali"
+  },
+  {
+    id: "arch-linux",
+    name: "Arch Linux",
+    tagline: "Distro DIY (Do-It-Yourself) minimalis bagi yang ingin kendali penuh atas sistemnya",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/1/13/Archlinux-vert-dark.svg",
+    badge: "Kastanya Linux Antusias Sejati",
+    base: "Independent",
+    packageManager: "Pacman / AUR",
+    defaultDE: "Bebas dipilih (CLI murni)",
+    releaseModel: "Pure Rolling Release",
+    minSpecs: { ramMB: 1024, storageGB: 10, cpuCores: 1, arch: ["x86_64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 8192, storageGB: 40, cpuCores: 4 },
+    weightProfile: { footprint: "light", difficulty: "advanced", uiStyle: "minimal", useCases: ["customization", "programming", "gaming", "daily"] },
+    nvidiaSupport: "excellent",
+    whyChoose: [
+      "Filosofi KISS (Keep It Simple, Stupid): Anda membangun OS sendiri dari nol.",
+      "Arch Wiki ensiklopedia dokumentasi Linux terlengkap di dunia.",
+      "Akses langsung ke paket software paling mutakhir beberapa jam setelah rilis."
+    ],
+    pros: ["Nol bloatware, super ringan.", "Memberikan pemahaman mendalam tentang cara kerja OS."],
+    cons: ["Tidak ada installer grafis standar out-of-the-box."],
+    officialUrl: "https://archlinux.org/", downloadUrl: "https://archlinux.org/download/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=arch"
+  },
+  {
+    id: "garuda-linux",
+    name: "Garuda Linux",
+    tagline: "Distro gaming berbasis Arch dengan tampilan Dragonized RGB yang sangat garang",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/69/Garuda_Linux_Logo.png",
+    badge: "Visual RGB Gaming & BTRFS Snapshot",
+    base: "Arch Linux",
+    packageManager: "Pacman / Chaotic-AUR",
+    defaultDE: "KDE Plasma Dragonized",
+    releaseModel: "Rolling Release",
+    minSpecs: { ramMB: 4096, storageGB: 30, cpuCores: 2, arch: ["x86_64"], gpu: "any", bootMode: ["uefi"] },
+    recSpecs: { ramMB: 16384, storageGB: 80, cpuCores: 4 },
+    weightProfile: { footprint: "heavy", difficulty: "intermediate", uiStyle: "modern", useCases: ["gaming", "multimedia", "customization"] },
+    nvidiaSupport: "excellent",
+    whyChoose: [
+      "Kernel Linux Zen latensi rendah untuk responsivitas gaming.",
+      "Sistem file BTRFS dengan snapshot otomatis Timeshift (rollback otomatis jika error).",
+      "Chaotic-AUR pre-configured membuat instalasi aplikasi Arch secepat kilat."
+    ],
+    pros: ["Visual neon cyberpunk sangat estetik.", "Garuda Assistant lengkap.", "Driver Nvidia siap pakai."],
+    cons: ["Visual cukup berat, butuh RAM 8GB-16GB."],
+    officialUrl: "https://garudalinux.org/", downloadUrl: "https://garudalinux.org/downloads", distroWatchUrl: "https://distrowatch.com/table.php?distribution=garuda"
+  },
+  {
+    id: "xubuntu",
+    name: "Xubuntu",
+    tagline: "Keandalan ekosistem Ubuntu yang dipadukan dengan kesederhanaan dan kestabilan desktop XFCE",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/b/b0/Xubuntu_logo.svg",
+    badge: "Stabil, Ringan & Produktif",
+    base: "Ubuntu",
+    packageManager: "APT / Snap",
+    defaultDE: "XFCE",
+    releaseModel: "LTS & Reguler",
+    minSpecs: { ramMB: 1024, storageGB: 15, cpuCores: 1, arch: ["x86_64"], gpu: "any", bootMode: ["uefi", "bios"] },
+    recSpecs: { ramMB: 4096, storageGB: 30, cpuCores: 2 },
+    weightProfile: { footprint: "light", difficulty: "beginner", uiStyle: "windows", useCases: ["office", "student", "daily", "potato-pc"] },
+    nvidiaSupport: "good",
+    whyChoose: [
+      "XFCE memberikan kecepatan respons tinggi tanpa mengorbankan fungsionalitas desktop lengkap.",
+      "Sepenuhnya kompatibel dengan semua tutorial dan repository Ubuntu.",
+      "Sangat hemat baterai untuk laptop lawas."
+    ],
+    pros: ["Sangat stabil, jarang crash.", "RAM idle hanya 600MB - 700MB.", "Dukungan LTS 3 tahun."],
+    cons: ["Tampilan tema standar agak sederhana."],
+    officialUrl: "https://xubuntu.org/", downloadUrl: "https://xubuntu.org/download/", distroWatchUrl: "https://distrowatch.com/table.php?distribution=xubuntu"
+  }
+];
+  </script>
+  <script>
+/**
+ * Recommendation Engine untuk Linux Distro Matcher
+ */
+class DistroMatcherEngine {
+  constructor(distros) {
+    this.distros = distros || LINUX_DISTROS;
+  }
+
+  evaluate(userInput) {
+    const {
+      ramMB = 4096,
+      cpuArch = "x86_64",
+      cpuCores = 2,
+      storageFreeGB = 40,
+      storageType = "ssd",
+      gpuVendor = "intel-integrated",
+      bootMode = "any",
+      userLevel = "beginner",
+      primaryUseCase = "daily",
+      desktopPreference = "any"
+    } = userInput;
+
+    const evaluated = this.distros.map(distro => {
+      let score = 0;
+      let reasons = [];
+      let warnings = [];
+      let isCompatible = true;
+      let incompatibleReasons = [];
+
+      // 1. CEK ARSITEKTUR CPU
+      if (!distro.minSpecs.arch.includes(cpuArch)) {
+        isCompatible = false;
+        incompatibleReasons.push(`Tidak mendukung prosesor ${cpuArch === 'i386' ? '32-bit' : cpuArch}. Distro ini hanya untuk ${distro.minSpecs.arch.join(', ')}.`);
+      }
+
+      // 2. CEK BOOT MODE
+      if (bootMode !== "any" && !distro.minSpecs.bootMode.includes(bootMode)) {
+        isCompatible = false;
+        incompatibleReasons.push(`Memerlukan mode boot ${distro.minSpecs.bootMode.join(' / ').toUpperCase()}, sistem Anda memakai ${bootMode.toUpperCase()}.`);
+      }
+
+      // 3. CEK KAPASITAS PENYIMPANAN MINIMUM
+      if (storageFreeGB < distro.minSpecs.storageGB) {
+        if (storageFreeGB < distro.minSpecs.storageGB * 0.7) {
+          isCompatible = false;
+          incompatibleReasons.push(`Membutuhkan minimal ${distro.minSpecs.storageGB} GB ruang kosong (tersedia: ${storageFreeGB} GB).`);
+        } else {
+          score -= 15;
+          warnings.push(`Ruang penyimpanan ${storageFreeGB} GB tergolong mepet (minimal ${distro.minSpecs.storageGB} GB).`);
+        }
+      }
+
+      // 4. SCORING RAM
+      if (ramMB < distro.minSpecs.ramMB) {
+        isCompatible = false;
+        incompatibleReasons.push(`RAM ${Math.round(ramMB / 1024 * 10) / 10} GB di bawah syarat minimum (${Math.round(distro.minSpecs.ramMB / 1024 * 10) / 10} GB).`);
+      } else if (ramMB >= distro.recSpecs.ramMB) {
+        score += 30;
+        reasons.push(`RAM Anda (${Math.round(ramMB / 1024)} GB) melampaui rekomendasi, multitasking akan sangat lancar.`);
+      } else {
+        const ratio = (ramMB - distro.minSpecs.ramMB) / (distro.recSpecs.ramMB - distro.minSpecs.ramMB);
+        const ramScore = 18 + Math.round(ratio * 10);
+        score += ramScore;
+        reasons.push(`RAM memenuhi syarat minimum (${distro.minSpecs.ramMB >= 1024 ? (distro.minSpecs.ramMB / 1024) + ' GB' : distro.minSpecs.ramMB + ' MB'}).`);
+      }
+
+      // 5. SCORING PROSESOR
+      if (cpuCores >= distro.recSpecs.cpuCores) {
+        score += 15;
+        reasons.push(`Jumlah core CPU (${cpuCores} Core) sangat ideal untuk distro ini.`);
+      } else if (cpuCores >= distro.minSpecs.cpuCores) {
+        score += 10;
+      } else {
+        score += 4;
+        warnings.push(`Jumlah prosesor (${cpuCores} Core) minim, performa mungkin santai.`);
+      }
+
+      // 6. SCORING KEBUTUHAN UTAMA
+      if (distro.weightProfile.useCases.includes(primaryUseCase)) {
+        score += 25;
+        reasons.push(`Sangat direkomendasikan untuk kebutuhan: "${this.getUseCaseLabel(primaryUseCase)}".`);
+      } else {
+        if (distro.weightProfile.useCases.includes("daily")) {
+          score += 14;
+        } else {
+          score += 6;
+        }
+      }
+
+      if (primaryUseCase === "gaming") {
+        if (distro.id === "nobara-project" || distro.id === "bazzite" || distro.id === "garuda-linux" || distro.id === "pop-os") {
+          score += 8;
+        }
+      }
+
+      if (primaryUseCase === "potato-pc") {
+        if (distro.weightProfile.footprint === "ultra-light" || distro.weightProfile.footprint === "light") {
+          score += 10;
+          reasons.push("Desain sistem ultra-ringan tidak membebani mesin komputer lawas.");
+        }
+      }
+
+      // 7. SCORING TINGKAT KEAHLIAN
+      if (userLevel === distro.weightProfile.difficulty) {
+        score += 15;
+        reasons.push(`Tingkat kesulitan cocok untuk profil Anda (${this.getDifficultyLabel(userLevel)}).`);
+      } else if (
+        (userLevel === "beginner" && distro.weightProfile.difficulty === "intermediate") ||
+        (userLevel === "intermediate" && distro.weightProfile.difficulty === "beginner") ||
+        (userLevel === "intermediate" && distro.weightProfile.difficulty === "advanced")
+      ) {
+        score += 8;
+      } else if (userLevel === "beginner" && distro.weightProfile.difficulty === "advanced") {
+        score += 0;
+        warnings.push("Distro ini membutuhkan pemahaman terminal (CLI) dan kurang ramah untuk pemula.");
+      } else {
+        score += 10;
+      }
+
+      // 8. SCORING TAMPILAN
+      if (desktopPreference === "any" || desktopPreference === distro.weightProfile.uiStyle) {
+        score += 10;
+        if (desktopPreference !== "any") {
+          reasons.push(`Gaya antarmuka sesuai selera Anda (${this.getUiStyleLabel(desktopPreference)}).`);
+        }
+      } else {
+        score += 4;
+      }
+
+      // 9. HARDWARE BONUS & PENALTIES
+      if (gpuVendor.includes("nvidia")) {
+        if (distro.nvidiaSupport === "excellent") {
+          score += 5;
+          reasons.push("Menyediakan driver NVIDIA siap pakai tanpa utak-atik terminal.");
+        } else if (distro.nvidiaSupport === "manual") {
+          warnings.push("Instalasi driver NVIDIA butuh pengaturan manual lewat terminal.");
+        }
+      }
+
+      if (storageType === "hdd") {
+        if (distro.weightProfile.footprint === "heavy") {
+          score -= 6;
+          warnings.push("Sistem agak berat di HDD biasa, loading awal mungkin terasa lambat.");
+        } else if (distro.weightProfile.footprint === "ultra-light" || distro.weightProfile.footprint === "light") {
+          score += 5;
+          reasons.push("Optimasi I/O ringan, mulus di harddisk mekanik (HDD).");
+        }
+      } else if (storageType === "ssd") {
+        score += 3;
+      }
+
+      if (ramMB <= 2048 && (distro.weightProfile.footprint === "heavy" || distro.weightProfile.footprint === "medium")) {
+        score -= 15;
+      }
+
+      if (!isCompatible) {
+        score = 0;
+      } else {
+        score = Math.max(10, Math.min(100, Math.round(score)));
+      }
+
+      return {
+        distro,
+        score,
+        isCompatible,
+        incompatibleReasons,
+        reasons: reasons.slice(0, 3),
+        warnings: warnings.slice(0, 2)
+      };
+    });
+
+    return evaluated.sort((a, b) => {
+      if (a.isCompatible !== b.isCompatible) return a.isCompatible ? -1 : 1;
+      return b.score - a.score;
+    });
+  }
+
+  getUseCaseLabel(key) {
+    const map = {
+      "daily": "Penggunaan Sehari-hari & Browsing",
+      "office": "Pekerjaan Kantor & Administrasi",
+      "student": "Belajar & Kuliah",
+      "potato-pc": "Laptop / Komputer Lawas (Spek Kentang)",
+      "gaming": "Bermain Game (Steam / Emulasi / Heroic)",
+      "programming": "Pemrograman & Software Development",
+      "multimedia": "Desain Grafis & Multimedia",
+      "privacy": "Keamanan & Privasi Mutlak",
+      "security": "Cyber Security & Hacking Etis",
+      "customization": "Kustomisasi Tampilan & Ricing",
+      "server": "Server Rumahan & Homelab"
+    };
+    return map[key] || key;
+  }
+
+  getDifficultyLabel(key) {
+    const map = {
+      "beginner": "Pemula (Mudah Dipakai)",
+      "intermediate": "Menengah (Perlu Sedikit Belajar)",
+      "advanced": "Tingkat Lanjut (Power User)"
+    };
+    return map[key] || key;
+  }
+
+  getUiStyleLabel(key) {
+    const map = {
+      "windows": "Gaya Windows (Taskbar & Start Menu)",
+      "macos": "Gaya macOS (Dock Bawah & Bersih)",
+      "modern": "Gaya Modern Unik (GNOME / Cosmic)",
+      "minimal": "Minimalis & Cepat (XFCE / IceWM)",
+      "any": "Bebas / Apa Saja"
+    };
+    return map[key] || key;
+  }
+}
+  </script>
+  <script>
+/**
+ * Application Controller untuk Linux Distro Matcher
+ */
+const state = {
+  engine: new DistroMatcherEngine(LINUX_DISTROS),
+  currentSpecs: {
+    ramMB: 4096,
+    cpuArch: "x86_64",
+    cpuCores: 2,
+    storageType: "ssd",
+    storageFreeGB: 40,
+    gpuVendor: "intel-integrated",
+    bootMode: "uefi",
+    userLevel: "beginner",
+    primaryUseCase: "daily",
+    desktopPreference: "any"
+  },
+  evaluatedResults: [],
+  comparisonList: [],
+  filterBase: "all",
+  sortBy: "score"
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  setupChipListeners();
+  setupDropdownListeners();
+  calculateRecommendations();
+  renderMatrixTable();
+});
+
+function setupChipListeners() {
+  document.querySelectorAll(".ram-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".ram-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      const val = parseInt(chip.dataset.value, 10);
+      document.getElementById("input-ram").value = val;
+      state.currentSpecs.ramMB = val;
+      const display = val >= 1024 ? `${val / 1024} GB` : `${val} MB`;
+      document.getElementById("ram-display").textContent = display;
+    });
+  });
+
+  document.querySelectorAll(".arch-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".arch-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      const val = chip.dataset.value;
+      document.getElementById("input-arch").value = val;
+      state.currentSpecs.cpuArch = val;
+    });
+  });
+
+  document.querySelectorAll(".core-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".core-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      const val = parseInt(chip.dataset.value, 10);
+      document.getElementById("input-cores").value = val;
+      state.currentSpecs.cpuCores = val;
+      const labels = { 1: "1 Core (Single)", 2: "2 Core (Dual)", 4: "4 Core (Quad)", 8: "8+ Core (Multi)" };
+      document.getElementById("cores-display").textContent = labels[val] || `${val} Core`;
+    });
+  });
+
+  document.querySelectorAll(".drive-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".drive-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      const val = chip.dataset.value;
+      document.getElementById("input-drive-type").value = val;
+      state.currentSpecs.storageType = val;
+      updateStorageDisplay();
+    });
+  });
+
+  document.querySelectorAll(".space-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".space-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      const val = parseInt(chip.dataset.value, 10);
+      document.getElementById("input-storage-free").value = val;
+      state.currentSpecs.storageFreeGB = val;
+      updateStorageDisplay();
+    });
+  });
+
+  document.querySelectorAll(".gpu-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".gpu-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      const val = chip.dataset.value;
+      document.getElementById("input-gpu").value = val;
+      state.currentSpecs.gpuVendor = val;
+    });
+  });
+
+  document.querySelectorAll(".level-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".level-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      const val = chip.dataset.value;
+      document.getElementById("input-level").value = val;
+      state.currentSpecs.userLevel = val;
+    });
+  });
+
+  document.querySelectorAll(".boot-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".boot-chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      const val = chip.dataset.value;
+      document.getElementById("input-boot").value = val;
+      state.currentSpecs.bootMode = val;
+    });
+  });
+}
+
+function setupDropdownListeners() {
+  document.getElementById("input-use-case").addEventListener("change", (e) => {
+    state.currentSpecs.primaryUseCase = e.target.value;
+  });
+
+  document.getElementById("input-ui-style").addEventListener("change", (e) => {
+    state.currentSpecs.desktopPreference = e.target.value;
+  });
+}
+
+function updateStorageDisplay() {
+  const gb = state.currentSpecs.storageFreeGB;
+  const type = state.currentSpecs.storageType.toUpperCase();
+  document.getElementById("storage-display").textContent = `${gb} GB (${type})`;
+}
+
+function handleCalculate(e) {
+  if (e) e.preventDefault();
+  calculateRecommendations(true);
+}
+
+function calculateRecommendations(shouldScroll = false) {
+  state.evaluatedResults = state.engine.evaluate(state.currentSpecs);
+  filterAndRenderResults();
+
+  if (shouldScroll) {
+    scrollToSection("results");
+    const topScore = state.evaluatedResults[0]?.score || 0;
+    if (topScore >= 85 && typeof confetti === "function") {
+      confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+    }
+  }
+}
+
+function filterAndRenderResults() {
+  state.filterBase = document.getElementById("filter-base").value;
+  state.sortBy = document.getElementById("sort-by").value;
+
+  let results = [...state.evaluatedResults];
+
+  if (state.filterBase !== "all") {
+    results = results.filter(item => item.distro.base.toLowerCase().includes(state.filterBase.toLowerCase()));
+  }
+
+  if (state.sortBy === "score") {
+    results.sort((a, b) => {
+      if (a.isCompatible !== b.isCompatible) return a.isCompatible ? -1 : 1;
+      return b.score - a.score;
+    });
+  } else if (state.sortBy === "ram-asc") {
+    results.sort((a, b) => a.distro.minSpecs.ramMB - b.distro.minSpecs.ramMB);
+  } else if (state.sortBy === "difficulty-asc") {
+    const diffWeights = { beginner: 1, intermediate: 2, advanced: 3 };
+    results.sort((a, b) => diffWeights[a.distro.weightProfile.difficulty] - diffWeights[b.distro.weightProfile.difficulty]);
+  } else if (state.sortBy === "name-asc") {
+    results.sort((a, b) => a.distro.name.localeCompare(b.distro.name));
+  }
+
+  renderResults(results);
+  renderSpecSummary();
+}
+
+function renderResults(results) {
+  const container = document.getElementById("distro-cards-grid");
+  const countBadge = document.getElementById("results-count-badge");
+  
+  const compatibleCount = results.filter(r => r.isCompatible).length;
+  countBadge.textContent = `${compatibleCount} Distro Cocok Ditemukan (${results.length} Total)`;
+
+  if (results.length === 0) {
+    container.innerHTML = `
+      <div class="col-span-full p-12 text-center glass-card rounded-2xl">
+        <i class="fa-solid fa-triangle-exclamation text-4xl text-amber-400 mb-4"></i>
+        <h3 class="text-xl font-bold text-white mb-2">Tidak Ada Distro yang Memenuhi Filter</h3>
+        <p class="text-sm text-slate-400 max-w-md mx-auto mb-6">Coba ganti filter basis di atas atau longgarkan spesifikasi komputer Anda.</p>
+        <button onclick="resetFilters()" class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs">Reset Filter</button>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = results.map((item, index) => {
+    const { distro, score, isCompatible, incompatibleReasons, reasons, warnings } = item;
+    const isTopMatch = index === 0 && isCompatible && score >= 85;
+    const isChecked = state.comparisonList.includes(distro.id);
+
+    let scoreBadgeBg = "bg-emerald-500/15 border-emerald-500/30 text-emerald-400";
+    let scoreText = `${score}% Cocok`;
+    let progressBg = "bg-gradient-to-r from-emerald-500 to-teal-400";
+
+    if (!isCompatible) {
+      scoreBadgeBg = "bg-rose-500/15 border-rose-500/30 text-rose-400";
+      scoreText = "Tidak Kompatibel";
+      progressBg = "bg-rose-500";
+    } else if (score < 60) {
+      scoreBadgeBg = "bg-amber-500/15 border-amber-500/30 text-amber-400";
+      progressBg = "bg-amber-500";
+    } else if (score < 80) {
+      scoreBadgeBg = "bg-cyan-500/15 border-cyan-500/30 text-cyan-400";
+      progressBg = "bg-cyan-500";
+    }
+
+    const footprintLabels = {
+      "ultra-light": "🪶 Ultra Ringan (< 500MB)",
+      "light": "⚡ Ringan (1-2GB)",
+      "medium": "⚖️ Sedang (2-4GB)",
+      "heavy": "🐘 Berat / Penuh Fitur (4GB+)"
+    };
+
+    return `
+      <div class="glass-card distro-card distro-card-animated rounded-2xl p-6 flex flex-col justify-between ${isTopMatch ? 'top-match border-emerald-500/50' : ''}" style="animation-delay: ${Math.min(index * 60, 600)}ms">
+        <div>
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <div class="flex items-center gap-3.5">
+              <div class="w-12 h-12 rounded-xl bg-slate-900 border border-slate-700 p-2 flex items-center justify-center shrink-0 shadow-md transform hover:scale-110 transition-transform">
+                <img src="${distro.logo}" alt="${distro.name}" class="w-full h-full object-contain" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg'">
+              </div>
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h3 class="text-xl font-bold text-white tracking-tight">${distro.name}</h3>
+                  ${isTopMatch ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500 text-slate-950 uppercase tracking-wider animate-pulse-soft">#1 Terbaik</span>' : ''}
+                </div>
+                <p class="text-xs text-slate-400 line-clamp-1 mt-0.5">${distro.tagline}</p>
+              </div>
+            </div>
+
+            <div class="text-right shrink-0">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold ${scoreBadgeBg} shadow-sm">
+                ${isCompatible ? `<i class="fa-solid fa-gauge-high"></i>` : `<i class="fa-solid fa-circle-xmark"></i>`}
+                <span>${scoreText}</span>
+              </div>
+            </div>
+          </div>
+
+          ${isCompatible ? `
+            <div class="w-full bg-slate-800 rounded-full h-1.5 mb-4 overflow-hidden">
+              <div class="${progressBg} score-progress-bar h-1.5 rounded-full" style="width: ${score}%"></div>
+            </div>
+          ` : `
+            <div class="w-full bg-rose-950/40 rounded-full h-1.5 mb-4 overflow-hidden">
+              <div class="bg-rose-500 score-progress-bar h-1.5 rounded-full" style="width: 15%"></div>
+            </div>
+          `}
+
+          <div class="flex flex-wrap gap-1.5 mb-4 text-[11px]">
+            <span class="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700/80 text-slate-300">
+              <i class="fa-solid fa-layer-group text-emerald-400 mr-1"></i>${distro.base}
+            </span>
+            <span class="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700/80 text-slate-300">
+              <i class="fa-solid fa-desktop text-cyan-400 mr-1"></i>${distro.defaultDE}
+            </span>
+            <span class="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700/80 text-slate-300">
+              ${footprintLabels[distro.weightProfile.footprint] || distro.weightProfile.footprint}
+            </span>
+          </div>
+
+          <div class="mb-5 space-y-2">
+            ${isCompatible ? `
+              <div class="text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                <span>Kenapa cocok untuk spek Anda:</span>
+              </div>
+              <ul class="text-xs text-slate-300 space-y-1.5 pl-2">
+                ${reasons.map(r => `<li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">&bull;</span><span>${r}</span></li>`).join("")}
+              </ul>
+            ` : `
+              <div class="text-xs font-semibold text-rose-400 mb-1 flex items-center gap-1.5">
+                <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
+                <span>Kendala Kompatibilitas:</span>
+              </div>
+              <ul class="text-xs text-rose-300 space-y-1 pl-2">
+                ${incompatibleReasons.map(r => `<li class="flex items-start gap-2"><span class="text-rose-400 font-bold">&bull;</span><span>${r}</span></li>`).join("")}
+              </ul>
+            `}
+
+            ${warnings.length > 0 ? `
+              <div class="mt-3 p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 space-y-1">
+                ${warnings.map(w => `<div class="flex items-start gap-1.5"><i class="fa-solid fa-circle-exclamation mt-0.5 shrink-0"></i><span>${w}</span></div>`).join("")}
+              </div>
+            ` : ''}
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 text-[11px] text-slate-400 grid grid-cols-3 gap-2 mb-4">
+            <div>
+              <span class="block text-slate-500">Min. RAM:</span>
+              <span class="font-semibold text-slate-300">${distro.minSpecs.ramMB >= 1024 ? (distro.minSpecs.ramMB / 1024) + ' GB' : distro.minSpecs.ramMB + ' MB'}</span>
+            </div>
+            <div>
+              <span class="block text-slate-500">Min. Storage:</span>
+              <span class="font-semibold text-slate-300">${distro.minSpecs.storageGB} GB</span>
+            </div>
+            <div>
+              <span class="block text-slate-500">Arsitektur:</span>
+              <span class="font-semibold text-slate-300">${distro.minSpecs.arch.join(', ')}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <button onclick="openDistroDetail('${distro.id}')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-info text-cyan-400"></i>
+              <span>Detail & Cara Install</span>
+            </button>
+            <a href="${distro.officialUrl}" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-slate-800/60 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700/60 text-xs transition-colors" title="Kunjungi Situs Resmi">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+
+          <label class="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-200 cursor-pointer select-none">
+            <input type="checkbox" onchange="toggleCompare('${distro.id}')" ${isChecked ? 'checked' : ''} class="rounded border-slate-700 text-emerald-500 focus:ring-0 bg-slate-800">
+            <span>Bandingkan</span>
+          </label>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderSpecSummary() {
+  const bar = document.getElementById("spec-summary-bar");
+  const s = state.currentSpecs;
+  const ramText = s.ramMB >= 1024 ? `${s.ramMB / 1024} GB RAM` : `${s.ramMB} MB RAM`;
+  const archText = s.cpuArch === "i386" ? "32-bit (x86)" : (s.cpuArch === "arm64" ? "ARM64" : "64-bit (x86_64)");
+  const coresText = `${s.cpuCores} Core CPU`;
+  const storageText = `${s.storageFreeGB} GB Free (${s.storageType.toUpperCase()})`;
+  const levelText = s.userLevel === "beginner" ? "Pemula" : (s.userLevel === "intermediate" ? "Menengah" : "Mahir");
+
+  bar.innerHTML = `
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-sliders text-emerald-400"></i>
+      <span class="text-slate-400">Spek yang dianalisis:</span>
+      <span class="font-bold text-white">${ramText}</span> &bull;
+      <span>${archText}</span> &bull;
+      <span>${coresText}</span> &bull;
+      <span>${storageText}</span> &bull;
+      <span>Level: <strong class="text-emerald-400">${levelText}</strong></span>
+    </div>
+    <div>
+      <button onclick="scrollToSection('calculator')" class="text-emerald-400 hover:underline font-medium text-xs flex items-center gap-1">
+        <span>Ubah Spek</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  `;
+}
+
+function detectHardwareSpecs() {
+  let detectedRAM = null;
+  let detectedCores = null;
+  let detectedArch = "x86_64";
+
+  if (navigator.deviceMemory) {
+    detectedRAM = navigator.deviceMemory * 1024;
+  }
+  if (navigator.hardwareConcurrency) {
+    detectedCores = navigator.hardwareConcurrency;
+  }
+  const ua = navigator.userAgent;
+  if (ua.includes("WOW64") || ua.includes("Win64") || ua.includes("x86_64") || ua.includes("x64")) {
+    detectedArch = "x86_64";
+  } else if (ua.includes("arm64") || ua.includes("aarch64")) {
+    detectedArch = "arm64";
+  }
+
+  if (detectedRAM) {
+    const validRAMs = [512, 1024, 2048, 4096, 8192, 16384, 32768, 65536];
+    let closestRAM = validRAMs.reduce((prev, curr) => Math.abs(curr - detectedRAM) < Math.abs(prev - detectedRAM) ? curr : prev);
+    state.currentSpecs.ramMB = closestRAM;
+    document.querySelectorAll(".ram-chip").forEach(c => {
+      c.classList.toggle("active", parseInt(c.dataset.value, 10) === closestRAM);
+    });
+    document.getElementById("input-ram").value = closestRAM;
+    document.getElementById("ram-display").textContent = closestRAM >= 1024 ? `${closestRAM / 1024} GB` : `${closestRAM} MB`;
+  }
+
+  if (detectedCores) {
+    let coreVal = 2;
+    if (detectedCores <= 1) coreVal = 1;
+    else if (detectedCores <= 3) coreVal = 2;
+    else if (detectedCores <= 6) coreVal = 4;
+    else coreVal = 8;
+
+    state.currentSpecs.cpuCores = coreVal;
+    document.querySelectorAll(".core-chip").forEach(c => {
+      c.classList.toggle("active", parseInt(c.dataset.value, 10) === coreVal);
+    });
+    document.getElementById("input-cores").value = coreVal;
+    document.getElementById("cores-display").textContent = `${coreVal} Core (${detectedCores} thread)`;
+  }
+
+  state.currentSpecs.cpuArch = detectedArch;
+  document.querySelectorAll(".arch-chip").forEach(c => {
+    c.classList.toggle("active", c.dataset.value === detectedArch);
+  });
+  document.getElementById("input-arch").value = detectedArch;
+
+  calculateRecommendations(true);
+  alert(`Deteksi Otomatis Berhasil!\n\nPerkiraan Hardware:\n• Arsitektur: ${detectedArch === 'x86_64' ? '64-bit' : detectedArch}\n• Core Logis: ${detectedCores || '2'} Cores\n• Estimasi Memori: ${detectedRAM ? (detectedRAM / 1024) + ' GB' : '4 GB'}`);
+}
+
+function applyPreset(type) {
+  const presets = {
+    potato: { ramMB: 2048, cpuArch: "x86_64", cpuCores: 2, storageType: "hdd", storageFreeGB: 20, gpuVendor: "intel-integrated", bootMode: "bios", userLevel: "beginner", primaryUseCase: "potato-pc", desktopPreference: "minimal" },
+    office: { ramMB: 4096, cpuArch: "x86_64", cpuCores: 2, storageType: "hdd", storageFreeGB: 40, gpuVendor: "intel-integrated", bootMode: "uefi", userLevel: "beginner", primaryUseCase: "office", desktopPreference: "windows" },
+    student: { ramMB: 8192, cpuArch: "x86_64", cpuCores: 4, storageType: "ssd", storageFreeGB: 40, gpuVendor: "intel-integrated", bootMode: "uefi", userLevel: "intermediate", primaryUseCase: "programming", desktopPreference: "modern" },
+    gaming: { ramMB: 16384, cpuArch: "x86_64", cpuCores: 4, storageType: "ssd", storageFreeGB: 100, gpuVendor: "nvidia-modern", bootMode: "uefi", userLevel: "intermediate", primaryUseCase: "gaming", desktopPreference: "windows" },
+    privacy: { ramMB: 8192, cpuArch: "x86_64", cpuCores: 4, storageType: "ssd", storageFreeGB: 20, gpuVendor: "intel-integrated", bootMode: "uefi", userLevel: "intermediate", primaryUseCase: "privacy", desktopPreference: "windows" }
+  };
+
+  const p = presets[type];
+  if (!p) return;
+
+  state.currentSpecs = { ...p };
+
+  document.querySelectorAll(".ram-chip").forEach(c => c.classList.toggle("active", parseInt(c.dataset.value, 10) === p.ramMB));
+  document.getElementById("input-ram").value = p.ramMB;
+  document.getElementById("ram-display").textContent = p.ramMB >= 1024 ? `${p.ramMB / 1024} GB` : `${p.ramMB} MB`;
+
+  document.querySelectorAll(".arch-chip").forEach(c => c.classList.toggle("active", c.dataset.value === p.cpuArch));
+  document.getElementById("input-arch").value = p.cpuArch;
+
+  document.querySelectorAll(".core-chip").forEach(c => c.classList.toggle("active", parseInt(c.dataset.value, 10) === p.cpuCores));
+  document.getElementById("input-cores").value = p.cpuCores;
+  document.getElementById("cores-display").textContent = `${p.cpuCores} Core`;
+
+  document.querySelectorAll(".drive-chip").forEach(c => c.classList.toggle("active", c.dataset.value === p.storageType));
+  document.getElementById("input-drive-type").value = p.storageType;
+
+  document.querySelectorAll(".space-chip").forEach(c => c.classList.toggle("active", parseInt(c.dataset.value, 10) === p.storageFreeGB));
+  document.getElementById("input-storage-free").value = p.storageFreeGB;
+  updateStorageDisplay();
+
+  document.querySelectorAll(".gpu-chip").forEach(c => c.classList.toggle("active", c.dataset.value === p.gpuVendor));
+  document.getElementById("input-gpu").value = p.gpuVendor;
+
+  document.querySelectorAll(".level-chip").forEach(c => c.classList.toggle("active", c.dataset.value === p.userLevel));
+  document.getElementById("input-level").value = p.userLevel;
+
+  document.querySelectorAll(".boot-chip").forEach(c => c.classList.toggle("active", c.dataset.value === p.bootMode));
+  document.getElementById("input-boot").value = p.bootMode;
+
+  document.getElementById("input-use-case").value = p.primaryUseCase;
+  document.getElementById("input-ui-style").value = p.desktopPreference;
+
+  calculateRecommendations(true);
+}
+
+function resetForm() { applyPreset("office"); }
+function resetFilters() { document.getElementById("filter-base").value = "all"; filterAndRenderResults(); }
+
+function toggleCompare(distroId) {
+  const index = state.comparisonList.indexOf(distroId);
+  if (index > -1) {
+    state.comparisonList.splice(index, 1);
+  } else {
+    if (state.comparisonList.length >= 3) {
+      alert("Anda dapat membandingkan maksimal 3 distro sekaligus.");
+      filterAndRenderResults();
+      return;
+    }
+    state.comparisonList.push(distroId);
+  }
+  updateComparisonDrawer();
+}
+
+function updateComparisonDrawer() {
+  const drawer = document.getElementById("comparison-drawer");
+  const countBadge = document.getElementById("compare-count-badge");
+  const len = state.comparisonList.length;
+
+  if (len > 0) {
+    drawer.classList.remove("hidden");
+    countBadge.textContent = len;
+  } else {
+    drawer.classList.add("hidden");
+  }
+}
+
+function clearComparison() {
+  state.comparisonList = [];
+  updateComparisonDrawer();
+  filterAndRenderResults();
+}
+
+function openComparisonModal() {
+  if (state.comparisonList.length === 0) return;
+  const distros = state.comparisonList.map(id => LINUX_DISTROS.find(d => d.id === id)).filter(Boolean);
+  const container = document.getElementById("compare-modal-content");
+
+  container.innerHTML = `
+    <table class="w-full text-left text-xs border-collapse">
+      <thead>
+        <tr class="border-b border-slate-800 text-slate-400">
+          <th class="p-3 w-40">Spesifikasi / Fitur</th>
+          ${distros.map(d => `
+            <th class="p-3 text-white font-bold text-sm">
+              <div class="flex items-center gap-2">
+                <img src="${d.logo}" class="w-6 h-6 object-contain" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg'">
+                <span>${d.name}</span>
+              </div>
+            </th>
+          `).join("")}
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-800/60 text-slate-300">
+        <tr>
+          <td class="p-3 font-semibold text-slate-400">Basis Sistem</td>
+          ${distros.map(d => `<td class="p-3"><span class="px-2 py-0.5 rounded bg-slate-800 text-emerald-400 font-semibold">${d.base}</span></td>`).join("")}
+        </tr>
+        <tr>
+          <td class="p-3 font-semibold text-slate-400">RAM Minimum</td>
+          ${distros.map(d => `<td class="p-3 font-bold">${d.minSpecs.ramMB >= 1024 ? (d.minSpecs.ramMB / 1024) + ' GB' : d.minSpecs.ramMB + ' MB'}</td>`).join("")}
+        </tr>
+        <tr>
+          <td class="p-3 font-semibold text-slate-400">RAM Rekomendasi</td>
+          ${distros.map(d => `<td class="p-3 text-emerald-400 font-bold">${d.recSpecs.ramMB >= 1024 ? (d.recSpecs.ramMB / 1024) + ' GB' : d.recSpecs.ramMB + ' MB'}</td>`).join("")}
+        </tr>
+        <tr>
+          <td class="p-3 font-semibold text-slate-400">Dukungan 32-bit</td>
+          ${distros.map(d => `<td class="p-3">${d.minSpecs.arch.includes('i386') ? '<span class="text-emerald-400 font-bold">✓ Ya</span>' : '<span class="text-slate-500">✗ Hanya 64-bit</span>'}</td>`).join("")}
+        </tr>
+        <tr>
+          <td class="p-3 font-semibold text-slate-400">Desktop Default</td>
+          ${distros.map(d => `<td class="p-3">${d.defaultDE}</td>`).join("")}
+        </tr>
+        <tr>
+          <td class="p-3 font-semibold text-slate-400">Package Manager</td>
+          ${distros.map(d => `<td class="p-3 font-mono text-[11px] text-cyan-300">${d.packageManager}</td>`).join("")}
+        </tr>
+        <tr>
+          <td class="p-3 font-semibold text-slate-400">Unduh & Panduan</td>
+          ${distros.map(d => `
+            <td class="p-3">
+              <a href="${d.downloadUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold transition-colors">
+                <i class="fa-solid fa-download"></i> Unduh ISO
+              </a>
+            </td>
+          `).join("")}
+        </tr>
+      </tbody>
+    </table>
+  `;
+  openModal("compare-modal");
+}
+
+function openDistroDetail(distroId) {
+  const distro = LINUX_DISTROS.find(d => d.id === distroId);
+  if (!distro) return;
+  const content = document.getElementById("detail-modal-content");
+
+  let installCommand = `sudo apt update && sudo apt install vlc gimp`;
+  if (distro.packageManager.includes("Pacman")) installCommand = `sudo pacman -Syu vlc gimp`;
+  else if (distro.packageManager.includes("DNF")) installCommand = `sudo dnf install vlc gimp`;
+  else if (distro.packageManager.includes("rpm-ostree")) installCommand = `flatpak install flathub org.videolan.VLC`;
+
+  content.innerHTML = `
+    <div class="p-6 border-b border-slate-800 flex items-start justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-slate-800 border border-slate-700 p-2.5 flex items-center justify-center shrink-0">
+          <img src="${distro.logo}" alt="${distro.name}" class="w-full h-full object-contain" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg'">
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="text-2xl font-bold text-white">${distro.name}</h3>
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">${distro.badge}</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">${distro.tagline}</p>
+        </div>
+      </div>
+      <button onclick="closeModal('detail-modal')" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="p-6 space-y-6 text-sm text-slate-300">
+      <div>
+        <h4 class="font-bold text-white text-base mb-2.5 flex items-center gap-2">
+          <i class="fa-solid fa-star text-amber-400"></i>
+          <span>Keunggulan Utama</span>
+        </h4>
+        <ul class="space-y-1.5 text-xs text-slate-300">
+          ${distro.whyChoose.map(item => `<li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-400 mt-0.5 shrink-0"></i><span>${item}</span></li>`).join("")}
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white text-base mb-2.5 flex items-center gap-2">
+          <i class="fa-solid fa-server text-cyan-400"></i>
+          <span>Spesifikasi Hardware</span>
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div class="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/80">
+            <span class="text-emerald-400 font-semibold block mb-1">Spesifikasi Minimum:</span>
+            <ul class="space-y-1 text-slate-300">
+              <li>• RAM: <strong>${distro.minSpecs.ramMB >= 1024 ? (distro.minSpecs.ramMB / 1024) + ' GB' : distro.minSpecs.ramMB + ' MB'}</strong></li>
+              <li>• Storage: <strong>${distro.minSpecs.storageGB} GB</strong></li>
+              <li>• CPU: <strong>${distro.minSpecs.cpuCores} Core</strong> (${distro.minSpecs.arch.join(', ')})</li>
+            </ul>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/80">
+            <span class="text-cyan-400 font-semibold block mb-1">Spesifikasi Rekomendasi:</span>
+            <ul class="space-y-1 text-slate-300">
+              <li>• RAM: <strong>${distro.recSpecs.ramMB >= 1024 ? (distro.recSpecs.ramMB / 1024) + ' GB' : distro.recSpecs.ramMB + ' MB'}</strong></li>
+              <li>• Storage: <strong>${distro.recSpecs.storageGB} GB</strong></li>
+              <li>• CPU: <strong>${distro.recSpecs.cpuCores} Core atau lebih</strong></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="terminal-box p-4 rounded-xl text-xs">
+        <div class="flex items-center justify-between text-slate-500 pb-2 mb-2 border-b border-slate-800">
+          <span class="font-mono text-slate-400 text-[11px]">Terminal Cheat Sheet (${distro.packageManager})</span>
+          <button onclick="navigator.clipboard.writeText('${installCommand}'); alert('Perintah disalin ke clipboard!');" class="text-slate-400 hover:text-white text-[11px] flex items-center gap-1">
+            <i class="fa-regular fa-copy"></i> Salin
+          </button>
+        </div>
+        <p class="text-slate-400 mb-1">Contoh perintah instalasi:</p>
+        <code class="text-emerald-400 font-mono block">$ ${installCommand}</code>
+      </div>
+    </div>
+
+    <div class="p-6 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 bg-slate-900/50">
+      <a href="${distro.distroWatchUrl}" target="_blank" rel="noopener noreferrer" class="text-xs text-slate-400 hover:text-white flex items-center gap-1">
+        <i class="fa-solid fa-chart-simple text-amber-400"></i> DistroWatch
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="${distro.officialUrl}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700">Situs Resmi</a>
+        <a href="${distro.downloadUrl}" target="_blank" rel="noopener noreferrer" class="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-download"></i> Unduh ISO
+        </a>
+      </div>
+    </div>
+  `;
+  openModal("detail-modal");
+}
+
+function openModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+}
+
+function closeModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.classList.add("hidden");
+    document.body.style.overflow = "auto";
+  }
+}
+
+function openBeginnerGuide() { openModal("guide-modal"); }
+function openWindowsSpecTips() { openModal("windows-modal"); }
+
+window.addEventListener("click", (e) => {
+  ["detail-modal", "compare-modal", "guide-modal", "windows-modal"].forEach(id => {
+    const modal = document.getElementById(id);
+    if (modal && e.target === modal) closeModal(id);
+  });
+});
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    ["detail-modal", "compare-modal", "guide-modal", "windows-modal"].forEach(id => closeModal(id));
+  }
+});
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth" });
+}
+
+// ==========================================
+// Comparison Matrix Table Engine
+// ==========================================
+let currentMatrixCategory = "all";
+
+function renderMatrixTable(category = currentMatrixCategory, query = "") {
+  const tbody = document.getElementById("matrix-table-body");
+  const countBadge = document.getElementById("matrix-count-badge");
+  if (!tbody || typeof LINUX_DISTROS === "undefined") return;
+
+  const q = query.trim().toLowerCase();
+
+  const filtered = LINUX_DISTROS.filter(distro => {
+    // Category filter
+    let matchCat = true;
+    if (category === "potato") {
+      matchCat = distro.minSpecs.ramMB <= 2048;
+    } else if (category === "32bit") {
+      matchCat = distro.minSpecs.arch.includes("i386");
+    } else if (category === "beginner") {
+      matchCat = distro.weightProfile.difficulty === "beginner";
+    } else if (category === "gaming") {
+      matchCat = distro.weightProfile.useCases.includes("gaming") || distro.weightProfile.useCases.includes("multimedia");
+    } else if (category === "privacy") {
+      matchCat = distro.weightProfile.useCases.includes("privacy") || distro.weightProfile.useCases.includes("portable-usb") || distro.weightProfile.useCases.includes("rescue");
+    }
+
+    if (!matchCat) return false;
+
+    // Search query filter
+    if (q) {
+      const targetStr = `${distro.name} ${distro.base} ${distro.defaultDE} ${distro.packageManager} ${distro.badge || ''} ${distro.tagline || ''}`.toLowerCase();
+      if (!targetStr.includes(q)) return false;
+    }
+
+    return true;
+  });
+
+  if (countBadge) countBadge.textContent = filtered.length;
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="9" class="p-8 text-center text-slate-400">
+          <i class="fa-solid fa-magnifying-glass text-2xl text-slate-600 mb-2 block"></i>
+          Tidak ditemukan distro yang cocok dengan pencarian atau filter yang dipilih.
+          <button onclick="setMatrixCategory('all'); clearMatrixSearch();" class="block mx-auto mt-2 text-emerald-400 hover:underline text-xs font-semibold">Reset Filter</button>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(d => {
+    const minRamStr = d.minSpecs.ramMB >= 1024 ? `${d.minSpecs.ramMB / 1024} GB` : `${d.minSpecs.ramMB} MB`;
+    const recRamStr = d.recSpecs.ramMB >= 1024 ? `${d.recSpecs.ramMB / 1024} GB` : `${d.recSpecs.ramMB} MB`;
+    const is32 = d.minSpecs.arch.includes("i386");
+    const diffBadge = d.weightProfile.difficulty === "beginner"
+      ? '<span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[11px] font-semibold">Sangat Mudah</span>'
+      : (d.weightProfile.difficulty === "intermediate"
+        ? '<span class="px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 text-[11px] font-semibold">Menengah</span>'
+        : '<span class="px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-400 border border-rose-500/30 text-[11px] font-semibold">Mahir</span>');
+
+    return `
+      <tr class="hover:bg-slate-800/40 transition-colors">
+        <td>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-700/80 p-1 flex items-center justify-center flex-shrink-0 shadow-sm">
+              <img src="${d.logo}" alt="${d.name}" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg';">
+            </div>
+            <div>
+              <div class="font-bold text-white text-xs sm:text-sm flex items-center gap-1.5">
+                <span>${d.name}</span>
+              </div>
+              <div class="text-[11px] text-slate-400 truncate max-w-[200px]">${d.badge || d.tagline}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-300 text-xs font-mono border border-slate-700/60">${d.base}</span></td>
+        <td><span class="font-semibold ${d.minSpecs.ramMB <= 1024 ? 'text-emerald-400' : 'text-slate-300'}">${minRamStr}</span></td>
+        <td><span class="font-semibold text-slate-300">${recRamStr}</span></td>
+        <td>
+          ${is32 
+            ? '<span class="text-emerald-400 font-bold text-xs flex items-center gap-1"><i class="fa-solid fa-check"></i> Ya (32-bit)</span>' 
+            : '<span class="text-slate-500 text-xs">64-bit Only</span>'}
+        </td>
+        <td><span class="text-slate-300 text-xs">${d.defaultDE}</span></td>
+        <td><code class="px-1.5 py-0.5 rounded bg-slate-900 text-slate-300 text-[11px] border border-slate-800 font-mono">${d.packageManager}</code></td>
+        <td>${diffBadge}</td>
+        <td class="text-right">
+          <div class="inline-flex items-center gap-1.5">
+            <button onclick="openDistroDetail('${d.id}')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors" title="Lihat Spesifikasi & Detail Lengkap">
+              <i class="fa-solid fa-circle-info text-cyan-400"></i> Detail
+            </button>
+            <a href="${d.downloadUrl}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/30 transition-colors flex items-center gap-1" title="Unduh Berkas ISO Resmi">
+              <i class="fa-solid fa-download"></i> Unduh
+            </a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function setMatrixCategory(cat) {
+  currentMatrixCategory = cat;
+  document.querySelectorAll(".matrix-filter-chip").forEach(chip => {
+    chip.classList.toggle("active", chip.dataset.cat === cat);
+  });
+  const searchInput = document.getElementById("matrix-search-input");
+  renderMatrixTable(currentMatrixCategory, searchInput ? searchInput.value : "");
+}
+
+function filterMatrixTable() {
+  const searchInput = document.getElementById("matrix-search-input");
+  const clearBtn = document.getElementById("matrix-clear-btn");
+  const q = searchInput ? searchInput.value : "";
+  if (clearBtn) {
+    if (q) clearBtn.classList.remove("hidden");
+    else clearBtn.classList.add("hidden");
+  }
+  renderMatrixTable(currentMatrixCategory, q);
+}
+
+function clearMatrixSearch() {
+  const searchInput = document.getElementById("matrix-search-input");
+  const clearBtn = document.getElementById("matrix-clear-btn");
+  if (searchInput) searchInput.value = "";
+  if (clearBtn) clearBtn.classList.add("hidden");
+  renderMatrixTable(currentMatrixCategory, "");
+}
+  </script>
+</body>
+</html>
